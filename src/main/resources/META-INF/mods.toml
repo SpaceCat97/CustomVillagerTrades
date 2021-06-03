@@ -4,9 +4,9 @@ license="All rights reserved"
 
 [[mods]]
 modId="customvillagertrades"
-version="1.16 v2"
+version="1.16 v4"
 displayName="Custom Villager Trades"
 authors="SpaceCat97"
 description='''
-Allows you to add your own trades for villagers using a config file.
+Allows you to add your own trades for villagers using several config files.
 '''

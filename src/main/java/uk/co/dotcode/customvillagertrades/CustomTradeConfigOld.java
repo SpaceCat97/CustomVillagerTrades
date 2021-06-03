@@ -1,5 +1,6 @@
 package uk.co.dotcode.customvillagertrades;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import com.google.common.base.Predicates;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;;
 
-public class CustomTradeConfig {
+public class CustomTradeConfigOld {
 
 	public static final ConfigValue<List<? extends String>> allVillagerTrades, armorerTrades, butcherTrades,
 			cartographerTrades, clericTrades, farmerTrades, fishermanTrades, fletcherTrades, leatherworkerTrades,
