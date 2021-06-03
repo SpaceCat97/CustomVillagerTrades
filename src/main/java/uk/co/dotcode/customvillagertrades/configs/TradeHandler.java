@@ -58,6 +58,9 @@ public class TradeHandler {
 
 				String profession = FilenameUtils.removeExtension(f.getName());
 
+				LogManager.getLogger(BaseClass.MODID).log(Level.INFO,
+						"Loading custom villager trades for: " + profession);
+
 				try (Reader reader = new FileReader(f)) {
 					TradeCollection coll = gson.fromJson(reader, TradeCollection.class);
 
