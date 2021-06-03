@@ -16,9 +16,7 @@ public class TradeEvent {
 	public void registerTrades(VillagerTradesEvent event) {
 		if (event.getType() != VillagerProfession.NONE) {
 			TradeCollection collection = TradeHandler.loadTrades(event.getType().toString());
-
-			System.out.println("abba");
-			System.out.println(collection);
+			TradeCollection collectionAll = TradeHandler.loadTrades("all");
 
 			if (collection != null) {
 				boolean problem = TradeUtil.checkTrades(collection);
@@ -33,10 +31,12 @@ public class TradeEvent {
 					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
 							"There is a problem with the trade config for " + event.getType().toString() + "file!");
 				}
+			}
 
-				TradeCollection collectionAll = TradeHandler.loadTrades("all");
+			if (collectionAll != null) {
+				boolean problemAll = TradeUtil.checkTrades(collectionAll);
 
-				if (!problem) {
+				if (!problemAll) {
 					for (int i = 0; i < collectionAll.trades.length; i++) {
 						MyTrade currentTrade = collectionAll.trades[i];
 
