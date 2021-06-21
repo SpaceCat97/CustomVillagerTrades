@@ -1,6 +1,5 @@
 package uk.co.dotcode.customvillagertrades;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,25 +19,27 @@ public class CustomTradeConfigOld {
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
-		builder.comment(" This is the trading config for the Villager Trading Mod.",
-				" For each villager type, must specify the trade, there are several formats you can use:",
-				" \"{trade level} {modid:id} {offer amount} {modid:id} {request amount} {trade experience}\"",
-				" \"{trade level} {modid:id} {offer amount} {modid:id} {request amount} {trade experience} {max trades}\"",
-				" \"{trade level} {modid:id} {offer amount} {modid:id} {request 1 amount} {modid:id} {request 2 amount} {trade experience}\"",
-				" \"{trade level} {modid:id} {offer amount} {modid:id} {request 1 amount} {modid:id} {request 2 amount} {trade experience} {max trades}\"",
-				"\n Note that there MUST be a space between each variable.",
-				" Example 1: \"1 minecraft:coal 1 dotcoinmod:ironcoin 2 1\"",
-				" Example 2: \"1 minecraft:sponge 1 minecraft:emerald 2 4 5\"",
-				" Example 3: \"3 minecraft:charcoal 5 minecraft:emerald 1 minecraft:oak_log 5 3\"",
-				" Example 4: \"4 minecraft:emerald 1 minecraft:gold_ingot 8 minecraft:diamond 1 10 8\"",
-				"\n Example 1 is a level 1 trade, you give the villager 1 iron coin (from another mod) for 1 coal.",
-				" Example 2 is a level 1 trade, you give the villager 2 emeralds for 1 sponge. This can be done 5 times.",
-				" Example 3 is a level 3 trade, you give the villager 1 emerald and 5 logs for 5 charcoal.",
-				" Example 4 is a level 4 trade, you give the villager 8 gold and 1 emerald for 1 diamond. This can be done 8 times.",
-				"\n The trade level determines at what level the trade becomes available. The range is 1-5 where 1 is lowest.",
-				" I suggest not going below 1 for the trade experience.",
-				" The {max trades} variable is optional. If empty it will default to 10.",
-				" You can find existing trades to use as a guide here: https:\\\\minecraft.fandom.com\\wiki\\Trading#Java_Edition \n");
+		builder.comment(" This is the OLD trading config for the Villager Trading Mod.",
+				"This file is completely useless, if you see this message then it has been generated for compatiablilty reasons.",
+				"The reason for this is because V2 of this mod used a different method to create trades. If I was to remove this config file then it could result in people losing their trades.");
+//				" For each villager type, must specify the trade, there are several formats you can use:",
+//				" \"{trade level} {modid:id} {offer amount} {modid:id} {request amount} {trade experience}\"",
+//				" \"{trade level} {modid:id} {offer amount} {modid:id} {request amount} {trade experience} {max trades}\"",
+//				" \"{trade level} {modid:id} {offer amount} {modid:id} {request 1 amount} {modid:id} {request 2 amount} {trade experience}\"",
+//				" \"{trade level} {modid:id} {offer amount} {modid:id} {request 1 amount} {modid:id} {request 2 amount} {trade experience} {max trades}\"",
+//				"\n Note that there MUST be a space between each variable.",
+//				" Example 1: \"1 minecraft:coal 1 dotcoinmod:ironcoin 2 1\"",
+//				" Example 2: \"1 minecraft:sponge 1 minecraft:emerald 2 4 5\"",
+//				" Example 3: \"3 minecraft:charcoal 5 minecraft:emerald 1 minecraft:oak_log 5 3\"",
+//				" Example 4: \"4 minecraft:emerald 1 minecraft:gold_ingot 8 minecraft:diamond 1 10 8\"",
+//				"\n Example 1 is a level 1 trade, you give the villager 1 iron coin (from another mod) for 1 coal.",
+//				" Example 2 is a level 1 trade, you give the villager 2 emeralds for 1 sponge. This can be done 5 times.",
+//				" Example 3 is a level 3 trade, you give the villager 1 emerald and 5 logs for 5 charcoal.",
+//				" Example 4 is a level 4 trade, you give the villager 8 gold and 1 emerald for 1 diamond. This can be done 8 times.",
+//				"\n The trade level determines at what level the trade becomes available. The range is 1-5 where 1 is lowest.",
+//				" I suggest not going below 1 for the trade experience.",
+//				" The {max trades} variable is optional. If empty it will default to 10.",
+//				" You can find existing trades to use as a guide here: https:\\\\minecraft.fandom.com\\wiki\\Trading#Java_Edition \n");
 
 		allVillagerTrades = defineEmptyList(builder, "allVillagerTrades", Arrays.asList());
 
