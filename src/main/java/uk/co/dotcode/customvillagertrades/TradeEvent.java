@@ -22,6 +22,14 @@ public class TradeEvent {
 				boolean problem = TradeUtil.checkTrades(collection);
 
 				if (!problem) {
+					if (collection.removeOtherTrades) {
+						for (int level = 1; level <= 5; level++) {
+							while (event.getTrades().get(level).size() > 0) {
+								event.getTrades().get(level).remove(0);
+							}
+						}
+					}
+
 					for (int i = 0; i < collection.trades.length; i++) {
 						MyTrade currentTrade = collection.trades[i];
 

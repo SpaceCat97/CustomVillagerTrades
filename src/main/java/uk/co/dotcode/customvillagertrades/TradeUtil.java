@@ -51,37 +51,19 @@ public class TradeUtil {
 			}
 
 			// Enchantments
-			if (trade.offer.enchantmentKey != null) {
-				if (!checkEnchantmentKey(trade.offer.enchantmentKey)) {
-					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-							"Unable to add a custom trade! Reason: invalid offer enchantment - " + coll.profession
-									+ ", entry number = " + i + ", item = " + trade.offer.itemKey + ", enchantment = "
-									+ trade.offer.enchantmentKey);
-					problem = true;
-				}
-			}
-
-			if (trade.request.enchantmentKey != null) {
-				if (!checkEnchantmentKey(trade.request.enchantmentKey)) {
-					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-							"Unable to add a custom trade! Reason: invalid request enchantment - " + coll.profession
-									+ ", entry number = " + i + ", item = " + trade.request.itemKey + ", enchantment = "
-									+ trade.request.enchantmentKey);
-					problem = true;
-				}
-			}
+			boolean offerProblem = trade.offer.checkEnchantments();
+			boolean requestProblem = trade.request.checkEnchantments();
+			boolean additionalRequestProblem = false;
 
 			if (trade.additionalRequest != null) {
-				if (trade.additionalRequest.enchantmentKey != null) {
-					if (!checkEnchantmentKey(trade.additionalRequest.enchantmentKey)) {
-						LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-								"Unable to add a custom trade! Reason: invalid additional request enchantment - "
-										+ coll.profession + ", entry number = " + i + ", item = "
-										+ trade.additionalRequest.itemKey + ", enchantment = "
-										+ trade.additionalRequest.enchantmentKey);
-						problem = true;
-					}
-				}
+				additionalRequestProblem = trade.additionalRequest.checkEnchantments();
+			}
+
+			if (offerProblem || requestProblem || additionalRequestProblem) {
+				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+						"Unable to add a custom trade! Reason: invalid enchantment (listed above) - " + coll.profession
+								+ ", entry number = " + i + ", item = " + trade.offer.itemKey);
+				problem = true;
 			}
 
 			// Trade Level
@@ -111,7 +93,7 @@ public class TradeUtil {
 		return true;
 	}
 
-	private static boolean checkEnchantmentKey(String enchantmentKey) {
+	public static boolean checkEnchantmentKey(String enchantmentKey) {
 		String[] splitLocation = enchantmentKey.split(":");
 		if (splitLocation.length == 2) {
 			ResourceLocation resourceLocation = getResourceLocation(enchantmentKey);

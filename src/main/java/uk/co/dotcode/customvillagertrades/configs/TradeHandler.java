@@ -214,6 +214,14 @@ public class TradeHandler {
 
 		MyTrade exampleOne = new MyTrade();
 		exampleOne.offer = new MyTradeItem("minecraft:dirt", 3);
+
+		exampleOne.offer.enchantments = new MyTradeEnchantment[2];
+		exampleOne.offer.enchantments[0] = new MyTradeEnchantment();
+		exampleOne.offer.enchantments[0].enchantmentKey = "minecraft:knockback";
+		exampleOne.offer.enchantments[0].enchantmentLevel = 2;
+		exampleOne.offer.enchantments[1] = new MyTradeEnchantment();
+		exampleOne.offer.enchantments[1].enchantmentKey = "minecraft:sharpness";
+		exampleOne.offer.enchantments[1].enchantmentLevel = 1;
 		exampleOne.request = new MyTradeItem("minecraft:cobblestone", 1);
 		exampleOne.tradeExp = 3;
 		exampleOne.maxUses = 10;
