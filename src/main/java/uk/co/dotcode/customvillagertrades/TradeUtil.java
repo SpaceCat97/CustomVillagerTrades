@@ -1,5 +1,6 @@
 package uk.co.dotcode.customvillagertrades;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +16,28 @@ import net.minecraftforge.registries.ForgeRegistries;
 import uk.co.dotcode.customvillagertrades.configs.MyTrade;
 import uk.co.dotcode.customvillagertrades.configs.MyTradeItem;
 import uk.co.dotcode.customvillagertrades.configs.TradeCollection;
+import uk.co.dotcode.customvillagertrades.configs.WandererTradeCollection;
 
 public class TradeUtil {
 
-	public static boolean checkTrades(TradeCollection coll) {
-		MyTrade[] trades = coll.trades;
+	public static boolean checkTradeCollection(TradeCollection coll) {
+		return checkTrade(coll.trades, coll.profession);
+	}
 
+	public static boolean checkTradeCollection(WandererTradeCollection coll) {
+		return checkTrade(coll.trades, coll.profession);
+
+	}
+
+	public static boolean isJsonFile(File f) {
+		String extension = f.getPath().substring(f.getPath().lastIndexOf("."));
+		if (extension.equalsIgnoreCase(".json")) {
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean checkTrade(MyTrade[] trades, String profession) {
 		boolean problem = false;
 
 		for (int i = 0; i < trades.length; i++) {
@@ -29,14 +46,14 @@ public class TradeUtil {
 			// Items
 			if (!checkItemKey(trade.offer.itemKey)) {
 				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-						"Unable to add a custom trade! Reason: invalid offer item - " + coll.profession
-								+ ", entry number = " + i + ", item = " + trade.offer.itemKey);
+						"Unable to add a custom trade! Reason: invalid offer item - " + profession + ", entry number = "
+								+ i + ", item = " + trade.offer.itemKey);
 				problem = true;
 			}
 
 			if (!checkItemKey(trade.request.itemKey)) {
 				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-						"Unable to add a custom trade! Reason: invalid request item - " + coll.profession
+						"Unable to add a custom trade! Reason: invalid request item - " + profession
 								+ ", entry number = " + i + ", item = " + trade.request.itemKey);
 				problem = true;
 			}
@@ -44,36 +61,35 @@ public class TradeUtil {
 			if (trade.additionalRequest != null) {
 				if (!checkItemKey(trade.additionalRequest.itemKey)) {
 					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-							"Unable to add a custom trade! Reason: invalid additional request item - " + coll.profession
+							"Unable to add a custom trade! Reason: invalid additional request item - " + profession
 									+ ", entry number = " + i + ", item = " + trade.additionalRequest.itemKey);
 					problem = true;
 				}
-			}
 
-			// Enchantments
-			boolean offerProblem = trade.offer.checkEnchantments();
-			boolean requestProblem = trade.request.checkEnchantments();
-			boolean additionalRequestProblem = false;
+				// Enchantments
+				boolean offerProblem = trade.offer.checkEnchantments();
+				boolean requestProblem = trade.request.checkEnchantments();
+				boolean additionalRequestProblem = false;
 
-			if (trade.additionalRequest != null) {
-				additionalRequestProblem = trade.additionalRequest.checkEnchantments();
-			}
+				if (trade.additionalRequest != null) {
+					additionalRequestProblem = trade.additionalRequest.checkEnchantments();
+				}
 
-			if (offerProblem || requestProblem || additionalRequestProblem) {
-				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-						"Unable to add a custom trade! Reason: invalid enchantment (listed above) - " + coll.profession
-								+ ", entry number = " + i + ", item = " + trade.offer.itemKey);
-				problem = true;
-			}
+				if (offerProblem || requestProblem || additionalRequestProblem) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+							"Unable to add a custom trade! Reason: invalid enchantment (listed above) - " + profession
+									+ ", entry number = " + i + ", item = " + trade.offer.itemKey);
+					problem = true;
+				}
 
-			// Trade Level
-			if (trade.tradeLevel < 1 || trade.tradeLevel > 5) {
-				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-						"Unable to add a custom trade! Reason: invalid trade level. Use a number between 1 and 5 - "
-								+ coll.profession + ", entry number = " + i + ", level = " + trade.tradeLevel);
+				// Trade Level
+				if (trade.tradeLevel < 1 || trade.tradeLevel > 5) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+							"Unable to add a custom trade! Reason: invalid trade level. Use a number between 1 and 5 - "
+									+ profession + ", entry number = " + i + ", level = " + trade.tradeLevel);
+				}
 			}
 		}
-
 		return problem;
 	}
 

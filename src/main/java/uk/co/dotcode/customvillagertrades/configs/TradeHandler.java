@@ -29,12 +29,13 @@ import uk.co.dotcode.customvillagertrades.TradeUtil;
 public class TradeHandler {
 
 	public static File folder = FMLPaths.CONFIGDIR.get().resolve("custom trades").toFile();
+	public static File folderWanderer = FMLPaths.CONFIGDIR.get().resolve("custom trades/wanderer").toFile();
 	public static File fileOld = FMLPaths.CONFIGDIR.get().resolve("customvillagertrades-common.toml").toFile();
 
 	public static HashMap<String, TradeCollection> customTrades = new HashMap<String, TradeCollection>();
+	public static HashMap<String, WandererTradeCollection> customWandererTrades = new HashMap<String, WandererTradeCollection>();
 
 	public static void init() {
-
 		if (!folder.exists()) {
 			folder.mkdir();
 			LogManager.getLogger(BaseClass.MODID).log(Level.INFO, "No config found, creating");
@@ -47,7 +48,12 @@ public class TradeHandler {
 			}
 		}
 
+		if (!folderWanderer.exists()) {
+			folderWanderer.mkdir();
+		}
+
 		File[] fileArray = folder.listFiles();
+		File[] fileArrayWanderer = folderWanderer.listFiles();
 
 		if (fileArray == null || fileArray.length < 1) {
 			generateExampleTrade();
@@ -55,40 +61,72 @@ public class TradeHandler {
 			Gson gson = new Gson();
 
 			for (File f : fileArray) {
-
-				String profession = FilenameUtils.removeExtension(f.getName());
-
-				LogManager.getLogger(BaseClass.MODID).log(Level.INFO,
-						"Loading custom villager trades for: " + profession);
-
-				try (Reader reader = new FileReader(f)) {
-					TradeCollection coll = gson.fromJson(reader, TradeCollection.class);
-
-					customTrades.put(profession, coll);
-
-				} catch (IOException e) {
-					LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
-							"A problem has been found with the config file for '" + profession
-									+ "'! This is most likely an issue where the file can not be found/accessed (which should never happen...)");
-					e.printStackTrace();
-				} catch (JsonSyntaxException e) {
-					LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
-							"A problem has been found with the config file for '" + profession
-									+ "'! This is most likely a formatting issue - take a look over the config for anything that seems out of place (or use a JSON verifier).");
+				if (!f.isDirectory()) {
+					if (TradeUtil.isJsonFile(f)) {
+						loadFile(gson, f, false);
+					}
 				}
+			}
 
-				Iterator<Entry<String, TradeCollection>> it = customTrades.entrySet().iterator();
-
-				while (it.hasNext()) {
-					Map.Entry<String, TradeCollection> entry = (Map.Entry<String, TradeCollection>) it.next();
-					TradeUtil.checkTrades(entry.getValue());
+			for (File f : fileArrayWanderer) {
+				if (!f.isDirectory()) {
+					if (TradeUtil.isJsonFile(f)) {
+						loadFile(gson, f, true);
+					}
 				}
+			}
+		}
+	}
+
+	private static void loadFile(Gson gson, File f, boolean isWanderer) {
+		String profession = FilenameUtils.removeExtension(f.getName());
+
+		LogManager.getLogger(BaseClass.MODID).log(Level.INFO, "Loading custom villager trades for: " + profession);
+
+		try (Reader reader = new FileReader(f)) {
+			if (isWanderer) {
+				WandererTradeCollection coll = gson.fromJson(reader, WandererTradeCollection.class);
+				customWandererTrades.put(profession, coll);
+			} else {
+				TradeCollection coll = gson.fromJson(reader, TradeCollection.class);
+				customTrades.put(profession, coll);
+			}
+
+		} catch (IOException e) {
+			LogManager.getLogger(BaseClass.MODID).log(Level.ERROR, "A problem has been found with the config file for '"
+					+ profession
+					+ "'! This is most likely an issue where the file can not be found/accessed (which should never happen...)");
+			e.printStackTrace();
+		} catch (JsonSyntaxException e) {
+			LogManager.getLogger(BaseClass.MODID).log(Level.ERROR, "A problem has been found with the config file for '"
+					+ profession
+					+ "'! This is most likely a formatting issue - take a look over the config for anything that seems out of place (or use a JSON verifier).");
+		}
+
+		if (isWanderer) {
+			Iterator<Entry<String, WandererTradeCollection>> it = customWandererTrades.entrySet().iterator();
+
+			while (it.hasNext()) {
+				Map.Entry<String, WandererTradeCollection> entry = (Map.Entry<String, WandererTradeCollection>) it
+						.next();
+				TradeUtil.checkTradeCollection(entry.getValue());
+			}
+		} else {
+			Iterator<Entry<String, TradeCollection>> it = customTrades.entrySet().iterator();
+
+			while (it.hasNext()) {
+				Map.Entry<String, TradeCollection> entry = (Map.Entry<String, TradeCollection>) it.next();
+				TradeUtil.checkTradeCollection(entry.getValue());
 			}
 		}
 	}
 
 	public static TradeCollection loadTrades(String profession) {
 		return customTrades.get(profession);
+	}
+
+	public static WandererTradeCollection loadWandererTrades(String profession) {
+		return customWandererTrades.get(profession);
 	}
 
 	private static void portOldConfig() {
