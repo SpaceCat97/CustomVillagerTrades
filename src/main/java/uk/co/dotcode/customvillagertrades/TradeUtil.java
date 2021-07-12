@@ -3,6 +3,7 @@ package uk.co.dotcode.customvillagertrades;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -19,6 +20,8 @@ import uk.co.dotcode.customvillagertrades.configs.TradeCollection;
 import uk.co.dotcode.customvillagertrades.configs.WandererTradeCollection;
 
 public class TradeUtil {
+
+	public static Random random = new Random();
 
 	public static boolean checkTradeCollection(TradeCollection coll) {
 		return checkTrade(coll.trades, coll.profession);
@@ -110,6 +113,34 @@ public class TradeUtil {
 	}
 
 	public static boolean checkEnchantmentKey(String enchantmentKey) {
+		if (enchantmentKey.equalsIgnoreCase("random")) {
+			return true;
+		}
+
+		if (enchantmentKey.contains("#")) {
+			String[] splitEnchantments = enchantmentKey.split("#");
+
+			boolean problem = false;
+
+			for (String s : splitEnchantments) {
+				if (checkSpecificEnchantment(s)) {
+					problem = true;
+				}
+			}
+
+			if (problem) {
+				return false;
+			} else {
+				return true;
+			}
+
+		}
+
+		return checkSpecificEnchantment(enchantmentKey);
+
+	}
+
+	private static boolean checkSpecificEnchantment(String enchantmentKey) {
 		String[] splitLocation = enchantmentKey.split(":");
 		if (splitLocation.length == 2) {
 			ResourceLocation resourceLocation = getResourceLocation(enchantmentKey);
