@@ -278,9 +278,22 @@ public class TradeHandler {
 		exampleTwo.demand = 10;
 		exampleTwo.tradeLevel = 2;
 
-		MyTrade[] exampleTradeList = new MyTrade[2];
+		MyTrade exampleThree = new MyTrade();
+		exampleThree.multiOffer = new MyTradeItem[3];
+		exampleThree.multiOffer[0] = new MyTradeItem("minecraft:golden_sword", 1);
+		exampleThree.multiOffer[1] = new MyTradeItem("minecraft:golden_shovel", 1);
+		exampleThree.multiOffer[2] = new MyTradeItem("minecraft:golden_axe", 1);
+		exampleThree.request = new MyTradeItem("minecraft:iron_ingot", 6);
+		exampleThree.tradeExp = 3;
+		exampleThree.maxUses = 5;
+		exampleThree.priceMultiplier = 0.1f;
+		exampleThree.demand = 10;
+		exampleThree.tradeLevel = 3;
+
+		MyTrade[] exampleTradeList = new MyTrade[3];
 		exampleTradeList[0] = exampleOne;
 		exampleTradeList[1] = exampleTwo;
+		exampleTradeList[2] = exampleThree;
 
 		exampleTrades.profession = VillagerProfession.ARMORER.toString();
 		exampleTrades.trades = exampleTradeList;
