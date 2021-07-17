@@ -2,10 +2,12 @@ package uk.co.dotcode.customvillagertrades.configs;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MerchantOffer;
+import uk.co.dotcode.customvillagertrades.TradeUtil;
 
 public class MyTrade {
 
 	public MyTradeItem offer;
+	public MyTradeItem[] multiOffer;
 	public MyTradeItem request;
 	public MyTradeItem additionalRequest;
 
@@ -19,6 +21,10 @@ public class MyTrade {
 	public MerchantOffer createTrade() {
 
 		MerchantOffer theTrade;
+
+		if (multiOffer != null) {
+			offer = multiOffer[TradeUtil.random.nextInt(multiOffer.length)];
+		}
 
 		if (additionalRequest != null) {
 			theTrade = new MerchantOffer(request.createItemStack(), additionalRequest.createItemStack(),

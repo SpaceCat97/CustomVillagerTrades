@@ -47,11 +47,24 @@ public class TradeUtil {
 			MyTrade trade = trades[i];
 
 			// Items
-			if (!checkItemKey(trade.offer.itemKey)) {
-				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-						"Unable to add a custom trade! Reason: invalid offer item - " + profession + ", entry number = "
-								+ i + ", item = " + trade.offer.itemKey);
-				problem = true;
+			if (trade.offer != null) {
+				if (!checkItemKey(trade.offer.itemKey)) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+							"Unable to add a custom trade! Reason: invalid offer item - " + profession
+									+ ", entry number = " + i + ", item = " + trade.offer.itemKey);
+					problem = true;
+				}
+			}
+
+			if (trade.multiOffer != null) {
+				for (MyTradeItem t : trade.multiOffer) {
+					if (!checkItemKey(t.itemKey)) {
+						LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+								"Unable to add a custom trade! Reason: invalid multiOffer item - " + profession
+										+ ", entry number = " + i + ", item = " + t.itemKey);
+						problem = true;
+					}
+				}
 			}
 
 			if (!checkItemKey(trade.request.itemKey)) {
@@ -70,18 +83,46 @@ public class TradeUtil {
 				}
 
 				// Enchantments
-				boolean offerProblem = trade.offer.checkEnchantments();
+
+				boolean offerProblem = false;
+				boolean multiOfferProblem = false;
 				boolean requestProblem = trade.request.checkEnchantments();
 				boolean additionalRequestProblem = false;
+
+				if (trade.offer != null) {
+					offerProblem = trade.offer.checkEnchantments();
+				}
+
+				if (trade.multiOffer != null) {
+					for (MyTradeItem t : trade.multiOffer) {
+						if (t.checkEnchantments()) {
+							multiOfferProblem = true;
+						}
+					}
+				}
 
 				if (trade.additionalRequest != null) {
 					additionalRequestProblem = trade.additionalRequest.checkEnchantments();
 				}
 
-				if (offerProblem || requestProblem || additionalRequestProblem) {
+				if (offerProblem || multiOfferProblem || requestProblem || additionalRequestProblem) {
+					String key = "";
+
+					if (offerProblem) {
+						key = trade.offer.itemKey;
+					}
+
+					if (multiOfferProblem) {
+						key = "multiOffer: ";
+						for (MyTradeItem t : trade.multiOffer) {
+							key += t.itemKey + ",";
+						}
+					}
+
 					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
 							"Unable to add a custom trade! Reason: invalid enchantment (listed above) - " + profession
-									+ ", entry number = " + i + ", item = " + trade.offer.itemKey);
+									+ ", entry number = " + i + ", item = " + key);
+
 					problem = true;
 				}
 
