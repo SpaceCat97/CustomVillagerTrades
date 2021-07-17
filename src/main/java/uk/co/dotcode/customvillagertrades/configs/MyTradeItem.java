@@ -76,7 +76,7 @@ public class MyTradeItem {
 
 					addEnchantmentMyWay(enchantedStack,
 							availableEnchantments.get(TradeUtil.random.nextInt(availableEnchantments.size())),
-							TradeUtil.random.nextInt(3) + 1);
+							enchantments[i].enchantmentLevel);
 				} else if (enchantments[i].enchantmentKey.contains("#")) {
 					String[] enchantmentChoices = enchantments[i].enchantmentKey.split("#");
 
@@ -85,7 +85,6 @@ public class MyTradeItem {
 					addEnchantmentMyWay(enchantedStack,
 							ForgeRegistries.ENCHANTMENTS.getValue(TradeUtil.getResourceLocation(chosenKey)),
 							enchantments[i].enchantmentLevel);
-
 				} else {
 					addEnchantmentMyWay(enchantedStack, enchantments[i].getEnchantment(),
 							enchantments[i].enchantmentLevel);
