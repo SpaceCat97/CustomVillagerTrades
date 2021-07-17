@@ -48,11 +48,12 @@ public class TradeHandler {
 			}
 		}
 
+		File[] fileArray = folder.listFiles();
+
 		if (!folderWanderer.exists()) {
 			folderWanderer.mkdir();
 		}
 
-		File[] fileArray = folder.listFiles();
 		File[] fileArrayWanderer = folderWanderer.listFiles();
 
 		if (fileArray == null || fileArray.length < 1) {
