@@ -8,9 +8,24 @@ public class MyTradeEnchantment {
 
 	public String enchantmentKey;
 	public Integer enchantmentLevel;
+	public Integer maxEnchantmentLevel;
+
+	public MyTradeEnchantment() {
+		if (maxEnchantmentLevel == null) {
+			maxEnchantmentLevel = 3;
+		}
+	}
+
+	public MyTradeEnchantment(String key, int enchantmentLevel) {
+		this();
+	}
+
+	public MyTradeEnchantment(String key, int enchantmentLevel, int maxEnchantmentLevel) {
+		this(key, enchantmentLevel);
+		this.maxEnchantmentLevel = maxEnchantmentLevel;
+	}
 
 	public Enchantment getEnchantment() {
 		return ForgeRegistries.ENCHANTMENTS.getValue(TradeUtil.getResourceLocation(enchantmentKey));
 	}
-
 }

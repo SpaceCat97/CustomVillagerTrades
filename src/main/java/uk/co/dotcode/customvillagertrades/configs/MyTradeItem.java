@@ -18,12 +18,14 @@ import uk.co.dotcode.customvillagertrades.TradeUtil;
 public class MyTradeItem {
 
 	public String itemKey;
-	public int amount;
+	public Integer amount;
 	public Integer priceModifier;
 
 	public Integer metadata;
 
 	public MyTradeEnchantment[] enchantments;
+	public MyTradeEnchantment[] semiRandomEnchantments;
+	public String[] blacklistedEnchantments;
 
 	public MyTradeItem(String itemKey, int amount) {
 		this.itemKey = itemKey;
@@ -38,11 +40,9 @@ public class MyTradeItem {
 		this.priceModifier = priceModifier;
 	}
 
-	public ItemStack createItemStack() {
 	public ItemStack createItemStack(int modifier) {
 		Item item = ForgeRegistries.ITEMS.getValue(TradeUtil.getResourceLocation(itemKey));
 
-		ItemStack stack = new ItemStack(item, amount);
 		ItemStack stack = new ItemStack(item, amount + modifier);
 
 		if (metadata != null) {
@@ -55,15 +55,27 @@ public class MyTradeItem {
 	}
 
 	public boolean checkEnchantments() {
-		if (enchantments != null && enchantments.length > 0) {
-			for (int i = 0; i < enchantments.length; i++) {
-				MyTradeEnchantment enchantment = enchantments[i];
+		if (enchantments != null) {
+			if (enchantments.length > 0) {
+				for (int i = 0; i < enchantments.length; i++) {
+					boolean check = TradeUtil.isEnchantmentKeyReal(enchantments[i].enchantmentKey);
 
-				boolean check = TradeUtil.checkEnchantmentKey(enchantment.enchantmentKey);
+					if (!check) {
+						LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+								"Enchantment invalid - " + enchantments[i].enchantmentKey);
+						return true;
+					}
+				}
+			}
+		}
+
+		if (semiRandomEnchantments != null && semiRandomEnchantments.length > 0) {
+			for (int i = 0; i < semiRandomEnchantments.length; i++) {
+				boolean check = TradeUtil.isEnchantmentKeyReal(semiRandomEnchantments[i].enchantmentKey);
 
 				if (!check) {
 					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-							"Enchantment invalid - " + enchantment.enchantmentKey);
+							"Semi-Random Enchantment invalid - " + semiRandomEnchantments[i].enchantmentKey);
 					return true;
 				}
 			}
@@ -88,7 +100,7 @@ public class MyTradeItem {
 
 					addEnchantmentMyWay(enchantedStack,
 							availableEnchantments.get(TradeUtil.random.nextInt(availableEnchantments.size())),
-							enchantments[i].enchantmentLevel);
+							enchantments[i].enchantmentLevel, enchantments[i].maxEnchantmentLevel);
 				} else if (enchantments[i].enchantmentKey.contains("#")) {
 					String[] enchantmentChoices = enchantments[i].enchantmentKey.split("#");
 
@@ -96,21 +108,37 @@ public class MyTradeItem {
 
 					addEnchantmentMyWay(enchantedStack,
 							ForgeRegistries.ENCHANTMENTS.getValue(TradeUtil.getResourceLocation(chosenKey)),
-							enchantments[i].enchantmentLevel);
+							enchantments[i].enchantmentLevel, enchantments[i].maxEnchantmentLevel);
 				} else {
 					addEnchantmentMyWay(enchantedStack, enchantments[i].getEnchantment(),
-							enchantments[i].enchantmentLevel);
+							enchantments[i].enchantmentLevel, enchantments[i].maxEnchantmentLevel);
 				}
 			}
 		}
+
+		if (semiRandomEnchantments != null) {
+			int randomInt = TradeUtil.random.nextInt(semiRandomEnchantments.length);
+
+			addEnchantmentMyWay(enchantedStack, semiRandomEnchantments[randomInt].getEnchantment(),
+					semiRandomEnchantments[randomInt].enchantmentLevel,
+					semiRandomEnchantments[randomInt].maxEnchantmentLevel);
+		}
+
 		return enchantedStack;
 	}
 
-	private ItemStack addEnchantmentMyWay(ItemStack stack, Enchantment enchantment, int level) {
+	private ItemStack addEnchantmentMyWay(ItemStack stack, Enchantment enchantment, int level, int maxLevel) {
+
+		int chosenLevel = level;
+
+		if (level < 0) {
+			chosenLevel = TradeUtil.random.nextInt(maxLevel) + 1;
+		}
+
 		if (stack.getItem() == Items.ENCHANTED_BOOK) {
-			EnchantedBookItem.addEnchantment(stack, new EnchantmentData(enchantment, level));
+			EnchantedBookItem.addEnchantment(stack, new EnchantmentData(enchantment, chosenLevel));
 		} else {
-			stack.enchant(enchantment, level);
+			stack.enchant(enchantment, chosenLevel);
 		}
 		return stack;
 	}
