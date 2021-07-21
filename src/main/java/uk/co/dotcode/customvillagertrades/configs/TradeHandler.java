@@ -255,12 +255,8 @@ public class TradeHandler {
 		exampleOne.offer = new MyTradeItem("minecraft:dirt", 3);
 
 		exampleOne.offer.enchantments = new MyTradeEnchantment[2];
-		exampleOne.offer.enchantments[0] = new MyTradeEnchantment();
-		exampleOne.offer.enchantments[0].enchantmentKey = "minecraft:knockback";
-		exampleOne.offer.enchantments[0].enchantmentLevel = 2;
-		exampleOne.offer.enchantments[1] = new MyTradeEnchantment();
-		exampleOne.offer.enchantments[1].enchantmentKey = "minecraft:sharpness";
-		exampleOne.offer.enchantments[1].enchantmentLevel = 1;
+		exampleOne.offer.enchantments[0] = new MyTradeEnchantment("minecraft:knockback", 2);
+		exampleOne.offer.enchantments[1] = new MyTradeEnchantment("minecraft:sharpness", -1, 5);
 		exampleOne.request = new MyTradeItem("minecraft:cobblestone", 1);
 		exampleOne.tradeExp = 3;
 		exampleOne.maxUses = 10;
@@ -280,20 +276,49 @@ public class TradeHandler {
 
 		MyTrade exampleThree = new MyTrade();
 		exampleThree.multiOffer = new MyTradeItem[3];
-		exampleThree.multiOffer[0] = new MyTradeItem("minecraft:golden_sword", 1);
-		exampleThree.multiOffer[1] = new MyTradeItem("minecraft:golden_shovel", 1);
-		exampleThree.multiOffer[2] = new MyTradeItem("minecraft:golden_axe", 1);
+		exampleThree.multiOffer[0] = new MyTradeItem("minecraft:iron_axe", 1, -3);
+		exampleThree.multiOffer[1] = new MyTradeItem("minecraft:golden_axe", 1, 0);
+		exampleThree.multiOffer[2] = new MyTradeItem("minecraft:diamond_axe", 1, 4);
 		exampleThree.request = new MyTradeItem("minecraft:iron_ingot", 6);
-		exampleThree.tradeExp = 3;
+		exampleThree.tradeExp = 15;
 		exampleThree.maxUses = 5;
 		exampleThree.priceMultiplier = 0.1f;
 		exampleThree.demand = 10;
 		exampleThree.tradeLevel = 3;
 
-		MyTrade[] exampleTradeList = new MyTrade[3];
+		MyTrade exampleFour = new MyTrade();
+		exampleFour.offer = new MyTradeItem("minecraft:wooden_sword", 1);
+		exampleFour.offer.semiRandomEnchantments = new MyTradeEnchantment[3];
+		exampleFour.offer.semiRandomEnchantments[0] = new MyTradeEnchantment("minecraft:mending", 1);
+		exampleFour.offer.semiRandomEnchantments[1] = new MyTradeEnchantment("minecraft:looting", 3);
+		exampleFour.offer.semiRandomEnchantments[2] = new MyTradeEnchantment("minecraft:sweeping", 2);
+		exampleFour.request = new MyTradeItem("minecraft:quartz", 5);
+		exampleFour.tradeExp = 20;
+		exampleFour.maxUses = 5;
+		exampleFour.priceMultiplier = 0;
+		exampleFour.demand = 10;
+		exampleFour.tradeLevel = 4;
+
+		MyTrade exampleFive = new MyTrade();
+		exampleFive.offer = new MyTradeItem("minecraft:enchanted_book", 1);
+		exampleFive.offer.enchantments = new MyTradeEnchantment[1];
+		exampleFive.offer.enchantments[0] = new MyTradeEnchantment("random", 2);
+		exampleFive.offer.blacklistedEnchantments = new String[2];
+		exampleFive.offer.blacklistedEnchantments[0] = "minecraft:protection";
+		exampleFive.offer.blacklistedEnchantments[1] = "minecraft:fire_protection";
+		exampleFive.request = new MyTradeItem("minecraft:emerald", 3);
+		exampleFive.tradeExp = 3;
+		exampleFive.maxUses = 10;
+		exampleFive.priceMultiplier = 0.1f;
+		exampleFive.demand = 10;
+		exampleFive.tradeLevel = 1;
+
+		MyTrade[] exampleTradeList = new MyTrade[5];
 		exampleTradeList[0] = exampleOne;
 		exampleTradeList[1] = exampleTwo;
 		exampleTradeList[2] = exampleThree;
+		exampleTradeList[3] = exampleFour;
+		exampleTradeList[4] = exampleFive;
 
 		exampleTrades.profession = VillagerProfession.ARMORER.toString();
 		exampleTrades.trades = exampleTradeList;
