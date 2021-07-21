@@ -81,58 +81,59 @@ public class TradeUtil {
 									+ ", entry number = " + i + ", item = " + trade.additionalRequest.itemKey);
 					problem = true;
 				}
+			}
 
-				// Enchantments
+			// Enchantments
 
-				boolean offerProblem = false;
-				boolean multiOfferProblem = false;
-				boolean requestProblem = trade.request.checkEnchantments();
-				boolean additionalRequestProblem = false;
+			boolean offerProblem = false;
+			boolean multiOfferProblem = false;
+			boolean requestProblem = trade.request.checkEnchantments();
+			boolean additionalRequestProblem = false;
 
-				if (trade.offer != null) {
-					offerProblem = trade.offer.checkEnchantments();
-				}
+			if (trade.offer != null) {
+				offerProblem = trade.offer.checkEnchantments();
+			}
 
-				if (trade.multiOffer != null) {
-					for (MyTradeItem t : trade.multiOffer) {
-						if (t.checkEnchantments()) {
-							multiOfferProblem = true;
-						}
+			if (trade.multiOffer != null) {
+				for (MyTradeItem t : trade.multiOffer) {
+					if (t.checkEnchantments()) {
+						multiOfferProblem = true;
 					}
-				}
-
-				if (trade.additionalRequest != null) {
-					additionalRequestProblem = trade.additionalRequest.checkEnchantments();
-				}
-
-				if (offerProblem || multiOfferProblem || requestProblem || additionalRequestProblem) {
-					String key = "";
-
-					if (offerProblem) {
-						key = trade.offer.itemKey;
-					}
-
-					if (multiOfferProblem) {
-						key = "multiOffer: ";
-						for (MyTradeItem t : trade.multiOffer) {
-							key += t.itemKey + ",";
-						}
-					}
-
-					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-							"Unable to add a custom trade! Reason: invalid enchantment (listed above) - " + profession
-									+ ", entry number = " + i + ", item = " + key);
-
-					problem = true;
-				}
-
-				// Trade Level
-				if (trade.tradeLevel < 1 || trade.tradeLevel > 5) {
-					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-							"Unable to add a custom trade! Reason: invalid trade level. Use a number between 1 and 5 - "
-									+ profession + ", entry number = " + i + ", level = " + trade.tradeLevel);
 				}
 			}
+
+			if (trade.additionalRequest != null) {
+				additionalRequestProblem = trade.additionalRequest.checkEnchantments();
+			}
+
+			if (offerProblem || multiOfferProblem || requestProblem || additionalRequestProblem) {
+				String key = "";
+
+				if (offerProblem) {
+					key = trade.offer.itemKey;
+				}
+
+				if (multiOfferProblem) {
+					key = "multiOffer: ";
+					for (MyTradeItem t : trade.multiOffer) {
+						key += t.itemKey + ",";
+					}
+				}
+
+				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+						"Unable to add a custom trade! Reason: invalid enchantment (listed above) - " + profession
+								+ ", entry number = " + i + ", item = " + key);
+
+				problem = true;
+			}
+
+			// Trade Level
+			if (trade.tradeLevel < 1 || trade.tradeLevel > 5) {
+				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+						"Unable to add a custom trade! Reason: invalid trade level. Use a number between 1 and 5 - "
+								+ profession + ", entry number = " + i + ", level = " + trade.tradeLevel);
+			}
+
 		}
 		return problem;
 	}
@@ -153,7 +154,7 @@ public class TradeUtil {
 		return true;
 	}
 
-	public static boolean checkEnchantmentKey(String enchantmentKey) {
+	public static boolean isEnchantmentKeyReal(String enchantmentKey) {
 		if (enchantmentKey.equalsIgnoreCase("random")) {
 			return true;
 		}
@@ -164,7 +165,7 @@ public class TradeUtil {
 			boolean problem = false;
 
 			for (String s : splitEnchantments) {
-				if (checkSpecificEnchantment(s)) {
+				if (isSpecificEnchantmentKeyReal(s)) {
 					problem = true;
 				}
 			}
@@ -177,11 +178,11 @@ public class TradeUtil {
 
 		}
 
-		return checkSpecificEnchantment(enchantmentKey);
+		return isSpecificEnchantmentKeyReal(enchantmentKey);
 
 	}
 
-	private static boolean checkSpecificEnchantment(String enchantmentKey) {
+	private static boolean isSpecificEnchantmentKeyReal(String enchantmentKey) {
 		String[] splitLocation = enchantmentKey.split(":");
 		if (splitLocation.length == 2) {
 			ResourceLocation resourceLocation = getResourceLocation(enchantmentKey);
