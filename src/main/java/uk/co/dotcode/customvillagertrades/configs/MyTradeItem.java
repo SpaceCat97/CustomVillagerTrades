@@ -55,21 +55,21 @@ public class MyTradeItem {
 	}
 
 	public boolean checkEnchantments() {
-		if (enchantments != null) {
-			if (enchantments.length > 0) {
-				for (int i = 0; i < enchantments.length; i++) {
-					boolean check = TradeUtil.isEnchantmentKeyReal(enchantments[i].enchantmentKey);
+		if (enchantments != null && enchantments.length > 0) {
+			for (int i = 0; i < enchantments.length; i++) {
+				boolean check = TradeUtil.isEnchantmentKeyReal(enchantments[i].enchantmentKey);
 
-					if (!check) {
-						LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-								"Enchantment invalid - " + enchantments[i].enchantmentKey);
-						return true;
-					}
+				if (!check) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+							"Enchantment invalid - " + enchantments[i].enchantmentKey);
+					return true;
 				}
 			}
 		}
 
-		if (semiRandomEnchantments != null && semiRandomEnchantments.length > 0) {
+		if (semiRandomEnchantments != null && semiRandomEnchantments.length > 0)
+
+		{
 			for (int i = 0; i < semiRandomEnchantments.length; i++) {
 				boolean check = TradeUtil.isEnchantmentKeyReal(semiRandomEnchantments[i].enchantmentKey);
 
