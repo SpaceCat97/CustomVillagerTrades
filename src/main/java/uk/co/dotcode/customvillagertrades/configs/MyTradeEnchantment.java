@@ -18,6 +18,8 @@ public class MyTradeEnchantment {
 
 	public MyTradeEnchantment(String key, int enchantmentLevel) {
 		this();
+		this.enchantmentKey = key;
+		this.enchantmentLevel = enchantmentLevel;
 	}
 
 	public MyTradeEnchantment(String key, int enchantmentLevel, int maxEnchantmentLevel) {
