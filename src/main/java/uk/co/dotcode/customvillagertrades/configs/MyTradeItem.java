@@ -19,6 +19,7 @@ public class MyTradeItem {
 
 	public String itemKey;
 	public int amount;
+	public Integer priceModifier;
 
 	public Integer metadata;
 
@@ -27,12 +28,22 @@ public class MyTradeItem {
 	public MyTradeItem(String itemKey, int amount) {
 		this.itemKey = itemKey;
 		this.amount = amount;
+		if (priceModifier == null) {
+			priceModifier = 0;
+		}
+	}
+
+	public MyTradeItem(String itemKey, int amount, int priceModifier) {
+		this(itemKey, amount);
+		this.priceModifier = priceModifier;
 	}
 
 	public ItemStack createItemStack() {
+	public ItemStack createItemStack(int modifier) {
 		Item item = ForgeRegistries.ITEMS.getValue(TradeUtil.getResourceLocation(itemKey));
 
 		ItemStack stack = new ItemStack(item, amount);
+		ItemStack stack = new ItemStack(item, amount + modifier);
 
 		if (metadata != null) {
 			stack.setDamageValue(metadata);
@@ -57,6 +68,7 @@ public class MyTradeItem {
 				}
 			}
 		}
+
 		return false;
 	}
 

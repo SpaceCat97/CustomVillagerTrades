@@ -27,11 +27,12 @@ public class MyTrade {
 		}
 
 		if (additionalRequest != null) {
-			theTrade = new MerchantOffer(request.createItemStack(), additionalRequest.createItemStack(),
-					offer.createItemStack(), 0, maxUses, tradeExp, priceMultiplier, demand);
+			theTrade = new MerchantOffer(request.createItemStack(offer.priceModifier),
+					additionalRequest.createItemStack(offer.priceModifier), offer.createItemStack(0), 0, maxUses,
+					tradeExp, priceMultiplier, demand);
 		} else {
-			theTrade = new MerchantOffer(request.createItemStack(), ItemStack.EMPTY, offer.createItemStack(), 0,
-					maxUses, tradeExp, priceMultiplier, demand);
+			theTrade = new MerchantOffer(request.createItemStack(offer.priceModifier), ItemStack.EMPTY,
+					offer.createItemStack(0), 0, maxUses, tradeExp, priceMultiplier, demand);
 		}
 
 		return theTrade;
