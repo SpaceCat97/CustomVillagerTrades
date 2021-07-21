@@ -183,6 +183,12 @@ public class TradeUtil {
 	}
 
 	private static boolean isSpecificEnchantmentKeyReal(String enchantmentKey) {
+		if (enchantmentKey == null) {
+			LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+					"Enchantment invalid - There's no enchantment key!");
+			return false;
+		}
+		
 		String[] splitLocation = enchantmentKey.split(":");
 		if (splitLocation.length == 2) {
 			ResourceLocation resourceLocation = getResourceLocation(enchantmentKey);
