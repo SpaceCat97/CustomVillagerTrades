@@ -93,8 +93,7 @@ public class MyTradeItem {
 					ArrayList<Enchantment> availableEnchantments = new ArrayList<Enchantment>();
 
 					for (Enchantment e : ForgeRegistries.ENCHANTMENTS.getValues()) {
-						if (e.canApplyAtEnchantingTable(enchantedStack)) {
-							availableEnchantments.add(e);
+						if (stack.getItem().getRegistryName().toString().equalsIgnoreCase("minecraft:enchanted_book")) {
 						}
 					}
 
