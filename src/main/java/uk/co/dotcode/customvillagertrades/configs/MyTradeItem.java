@@ -81,6 +81,18 @@ public class MyTradeItem {
 			}
 		}
 
+		if (blacklistedEnchantments != null && blacklistedEnchantments.length > 0) {
+			for (int i = 0; i < blacklistedEnchantments.length; i++) {
+				boolean check = TradeUtil.isEnchantmentKeyReal(blacklistedEnchantments[i]);
+
+				if (!check) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+							"Blacklisted Enchantment invalid - " + blacklistedEnchantments[i]);
+					return true;
+				}
+			}
+		}
+
 		return false;
 	}
 
@@ -93,7 +105,27 @@ public class MyTradeItem {
 					ArrayList<Enchantment> availableEnchantments = new ArrayList<Enchantment>();
 
 					for (Enchantment e : ForgeRegistries.ENCHANTMENTS.getValues()) {
+						boolean isBlacklisted = false;
+
 						if (stack.getItem().getRegistryName().toString().equalsIgnoreCase("minecraft:enchanted_book")) {
+							for (String blacklisted : blacklistedEnchantments) {
+								if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
+									isBlacklisted = true;
+								}
+							}
+							if (!isBlacklisted) {
+								availableEnchantments.add(e);
+							}
+						} else if (e.canApplyAtEnchantingTable(enchantedStack)) {
+							// Shameless copy/paste - promise you won't tell anyone!
+							for (String blacklisted : blacklistedEnchantments) {
+								if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
+									isBlacklisted = true;
+								}
+							}
+							if (!isBlacklisted) {
+								availableEnchantments.add(e);
+							}
 						}
 					}
 
