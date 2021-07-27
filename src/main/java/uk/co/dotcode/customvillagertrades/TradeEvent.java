@@ -116,7 +116,7 @@ public class TradeEvent {
 					}
 				} else {
 					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-							"There is a problem with the trade config for " + event.getType().toString() + "file!");
+							"There is a problem with the trade config for " + event.getType().toString() + " file!");
 				}
 			}
 
