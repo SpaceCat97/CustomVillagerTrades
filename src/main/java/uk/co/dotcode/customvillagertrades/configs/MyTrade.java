@@ -1,7 +1,11 @@
 package uk.co.dotcode.customvillagertrades.configs;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MerchantOffer;
+import uk.co.dotcode.customvillagertrades.BaseClass;
 import uk.co.dotcode.customvillagertrades.TradeUtil;
 
 public class MyTrade {
@@ -24,6 +28,13 @@ public class MyTrade {
 
 		if (multiOffer != null) {
 			offer = multiOffer[TradeUtil.random.nextInt(multiOffer.length)];
+
+		if (request == null) {
+			LogManager.getLogger(BaseClass.MODID).log(Level.ERROR, "Failed to add trade, the request was null!");
+		}
+
+		if (offer == null) {
+			LogManager.getLogger(BaseClass.MODID).log(Level.ERROR, "Failed to add trade, the offer was null!");
 		}
 
 		if (additionalRequest != null) {
