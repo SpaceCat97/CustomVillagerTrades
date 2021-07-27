@@ -184,11 +184,10 @@ public class TradeUtil {
 
 	private static boolean isSpecificEnchantmentKeyReal(String enchantmentKey) {
 		if (enchantmentKey == null) {
-			LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-					"Enchantment invalid - There's no enchantment key!");
+			LogManager.getLogger(BaseClass.MODID).log(Level.WARN, "Enchantment invalid - There's no enchantment key!");
 			return false;
 		}
-		
+
 		String[] splitLocation = enchantmentKey.split(":");
 		if (splitLocation.length == 2) {
 			ResourceLocation resourceLocation = getResourceLocation(enchantmentKey);
@@ -226,8 +225,8 @@ public class TradeUtil {
 					String[] dataToCheck = new String[] { data[1], data[3] };
 
 					if (doItemsExist(dataToCheck)) {
-						theTrade.offer = new MyTradeItem(data[1], Integer.parseInt(data[2]));
-						theTrade.request = new MyTradeItem(data[3], Integer.parseInt(data[4]));
+						theTrade.offer = new MyTradeItem(data[1], Integer.parseInt(data[2]), 0);
+						theTrade.request = new MyTradeItem(data[3], Integer.parseInt(data[4]), 0);
 						theTrade.tradeExp = Integer.parseInt(data[5]);
 
 						validTrades.add(theTrade);
@@ -242,8 +241,8 @@ public class TradeUtil {
 					String[] dataToCheck = new String[] { data[1], data[3] };
 
 					if (doItemsExist(dataToCheck)) {
-						theTrade.offer = new MyTradeItem(data[1], Integer.parseInt(data[2]));
-						theTrade.request = new MyTradeItem(data[3], Integer.parseInt(data[4]));
+						theTrade.offer = new MyTradeItem(data[1], Integer.parseInt(data[2]), 0);
+						theTrade.request = new MyTradeItem(data[3], Integer.parseInt(data[4]), 0);
 						theTrade.tradeExp = Integer.parseInt(data[5]);
 						theTrade.maxUses = Integer.parseInt(data[6]);
 
@@ -259,9 +258,9 @@ public class TradeUtil {
 					String[] dataToCheck = new String[] { data[1], data[3], data[5] };
 
 					if (doItemsExist(dataToCheck)) {
-						theTrade.offer = new MyTradeItem(data[1], Integer.parseInt(data[2]));
-						theTrade.request = new MyTradeItem(data[3], Integer.parseInt(data[4]));
-						theTrade.additionalRequest = new MyTradeItem(data[5], Integer.parseInt(data[6]));
+						theTrade.offer = new MyTradeItem(data[1], Integer.parseInt(data[2]), 0);
+						theTrade.request = new MyTradeItem(data[3], Integer.parseInt(data[4]), 0);
+						theTrade.additionalRequest = new MyTradeItem(data[5], Integer.parseInt(data[6]), 0);
 						theTrade.tradeExp = Integer.parseInt(data[7]);
 
 						validTrades.add(theTrade);
@@ -276,9 +275,9 @@ public class TradeUtil {
 					String[] dataToCheck = new String[] { data[1], data[3], data[5] };
 
 					if (doItemsExist(dataToCheck)) {
-						theTrade.offer = new MyTradeItem(data[1], Integer.parseInt(data[2]));
-						theTrade.request = new MyTradeItem(data[3], Integer.parseInt(data[4]));
-						theTrade.additionalRequest = new MyTradeItem(data[5], Integer.parseInt(data[6]));
+						theTrade.offer = new MyTradeItem(data[1], Integer.parseInt(data[2]), 0);
+						theTrade.request = new MyTradeItem(data[3], Integer.parseInt(data[4]), 0);
+						theTrade.additionalRequest = new MyTradeItem(data[5], Integer.parseInt(data[6]), 0);
 						theTrade.tradeExp = Integer.parseInt(data[7]);
 						theTrade.maxUses = Integer.parseInt(data[8]);
 

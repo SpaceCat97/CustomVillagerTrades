@@ -252,12 +252,12 @@ public class TradeHandler {
 		TradeCollection exampleTrades = new TradeCollection();
 
 		MyTrade exampleOne = new MyTrade();
-		exampleOne.offer = new MyTradeItem("minecraft:dirt", 3);
+		exampleOne.offer = new MyTradeItem("minecraft:dirt", 3, 0);
 
 		exampleOne.offer.enchantments = new MyTradeEnchantment[2];
 		exampleOne.offer.enchantments[0] = new MyTradeEnchantment("minecraft:knockback", 2);
 		exampleOne.offer.enchantments[1] = new MyTradeEnchantment("minecraft:sharpness", -1, 5);
-		exampleOne.request = new MyTradeItem("minecraft:cobblestone", 1);
+		exampleOne.request = new MyTradeItem("minecraft:cobblestone", 1, 0);
 		exampleOne.tradeExp = 3;
 		exampleOne.maxUses = 10;
 		exampleOne.priceMultiplier = 0.1f;
@@ -265,9 +265,9 @@ public class TradeHandler {
 		exampleOne.tradeLevel = 1;
 
 		MyTrade exampleTwo = new MyTrade();
-		exampleTwo.offer = new MyTradeItem("minecraft:emerald", 2);
-		exampleTwo.request = new MyTradeItem("minecraft:iron_ingot", 2);
-		exampleTwo.additionalRequest = new MyTradeItem("minecraft:gold_ingot", 1);
+		exampleTwo.offer = new MyTradeItem("minecraft:emerald", 2, 0);
+		exampleTwo.request = new MyTradeItem("minecraft:iron_ingot", 2, 0);
+		exampleTwo.additionalRequest = new MyTradeItem("minecraft:gold_ingot", 1, 0);
 		exampleTwo.tradeExp = 6;
 		exampleTwo.maxUses = 10;
 		exampleTwo.priceMultiplier = 0.1f;
@@ -279,7 +279,7 @@ public class TradeHandler {
 		exampleThree.multiOffer[0] = new MyTradeItem("minecraft:iron_axe", 1, -3);
 		exampleThree.multiOffer[1] = new MyTradeItem("minecraft:golden_axe", 1, 0);
 		exampleThree.multiOffer[2] = new MyTradeItem("minecraft:diamond_axe", 1, 4);
-		exampleThree.request = new MyTradeItem("minecraft:iron_ingot", 6);
+		exampleThree.request = new MyTradeItem("minecraft:iron_ingot", 6, 0);
 		exampleThree.tradeExp = 15;
 		exampleThree.maxUses = 5;
 		exampleThree.priceMultiplier = 0.1f;
@@ -287,12 +287,12 @@ public class TradeHandler {
 		exampleThree.tradeLevel = 3;
 
 		MyTrade exampleFour = new MyTrade();
-		exampleFour.offer = new MyTradeItem("minecraft:wooden_sword", 1);
+		exampleFour.offer = new MyTradeItem("minecraft:wooden_sword", 1, 0);
 		exampleFour.offer.semiRandomEnchantments = new MyTradeEnchantment[3];
 		exampleFour.offer.semiRandomEnchantments[0] = new MyTradeEnchantment("minecraft:mending", 1);
 		exampleFour.offer.semiRandomEnchantments[1] = new MyTradeEnchantment("minecraft:looting", 3);
 		exampleFour.offer.semiRandomEnchantments[2] = new MyTradeEnchantment("minecraft:sweeping", 2);
-		exampleFour.request = new MyTradeItem("minecraft:quartz", 5);
+		exampleFour.request = new MyTradeItem("minecraft:quartz", 5, 0);
 		exampleFour.tradeExp = 20;
 		exampleFour.maxUses = 5;
 		exampleFour.priceMultiplier = 0;
@@ -300,13 +300,13 @@ public class TradeHandler {
 		exampleFour.tradeLevel = 4;
 
 		MyTrade exampleFive = new MyTrade();
-		exampleFive.offer = new MyTradeItem("minecraft:enchanted_book", 1);
+		exampleFive.offer = new MyTradeItem("minecraft:enchanted_book", 1, 0);
 		exampleFive.offer.enchantments = new MyTradeEnchantment[1];
 		exampleFive.offer.enchantments[0] = new MyTradeEnchantment("random", 2);
 		exampleFive.offer.blacklistedEnchantments = new String[2];
 		exampleFive.offer.blacklistedEnchantments[0] = "minecraft:protection";
 		exampleFive.offer.blacklistedEnchantments[1] = "minecraft:fire_protection";
-		exampleFive.request = new MyTradeItem("minecraft:emerald", 3);
+		exampleFive.request = new MyTradeItem("minecraft:emerald", 3, 0);
 		exampleFive.tradeExp = 3;
 		exampleFive.maxUses = 10;
 		exampleFive.priceMultiplier = 0.1f;

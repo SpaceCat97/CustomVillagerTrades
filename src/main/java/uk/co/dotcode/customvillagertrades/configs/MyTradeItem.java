@@ -27,17 +27,21 @@ public class MyTradeItem {
 	public MyTradeEnchantment[] semiRandomEnchantments;
 	public String[] blacklistedEnchantments;
 
-	public MyTradeItem(String itemKey, int amount) {
+	public MyTradeItem(String itemKey, int amount, int priceModifier) {
 		this.itemKey = itemKey;
 		this.amount = amount;
-		if (priceModifier == null) {
-			priceModifier = 0;
+		this.priceModifier = priceModifier;
+
+		if (this.priceModifier == null) {
+			this.priceModifier = 0;
 		}
 	}
 
-	public MyTradeItem(String itemKey, int amount, int priceModifier) {
-		this(itemKey, amount);
-		this.priceModifier = priceModifier;
+	public int getPriceModifier() {
+		if (priceModifier == null) {
+			return 0;
+		}
+		return priceModifier;
 	}
 
 	public ItemStack createItemStack(int modifier) {
