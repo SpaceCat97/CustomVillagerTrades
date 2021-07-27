@@ -27,7 +27,10 @@ public class MyTrade {
 		MerchantOffer theTrade;
 
 		if (multiOffer != null) {
-			offer = multiOffer[TradeUtil.random.nextInt(multiOffer.length)];
+			if (multiOffer.length > 0) {
+				offer = multiOffer[TradeUtil.random.nextInt(multiOffer.length)];
+			}
+		}
 
 		if (request == null) {
 			LogManager.getLogger(BaseClass.MODID).log(Level.ERROR, "Failed to add trade, the request was null!");
