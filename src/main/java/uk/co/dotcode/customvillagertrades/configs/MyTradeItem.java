@@ -112,9 +112,11 @@ public class MyTradeItem {
 						boolean isBlacklisted = false;
 
 						if (stack.getItem().getRegistryName().toString().equalsIgnoreCase("minecraft:enchanted_book")) {
-							for (String blacklisted : blacklistedEnchantments) {
-								if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
-									isBlacklisted = true;
+							if (blacklistedEnchantments != null) {
+								for (String blacklisted : blacklistedEnchantments) {
+									if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
+										isBlacklisted = true;
+									}
 								}
 							}
 							if (!isBlacklisted) {
@@ -122,9 +124,11 @@ public class MyTradeItem {
 							}
 						} else if (e.canApplyAtEnchantingTable(enchantedStack)) {
 							// Shameless copy/paste - promise you won't tell anyone!
-							for (String blacklisted : blacklistedEnchantments) {
-								if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
-									isBlacklisted = true;
+							if (blacklistedEnchantments != null) {
+								for (String blacklisted : blacklistedEnchantments) {
+									if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
+										isBlacklisted = true;
+									}
 								}
 							}
 							if (!isBlacklisted) {
