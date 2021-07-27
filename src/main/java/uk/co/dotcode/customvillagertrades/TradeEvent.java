@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
+import net.minecraft.entity.merchant.villager.VillagerTrades.ITrade;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,8 +39,8 @@ public class TradeEvent {
 			}
 
 			if (!problem) {
-				ArrayList<VillagerTrades.ITrade> genericArray = new ArrayList<VillagerTrades.ITrade>();
-				ArrayList<VillagerTrades.ITrade> rareArray = new ArrayList<VillagerTrades.ITrade>();
+				ArrayList<ITrade> genericArray = new ArrayList<ITrade>();
+				ArrayList<ITrade> rareArray = new ArrayList<ITrade>();
 
 				if (collection.removeOtherTrades) {
 					while (event.getGenericTrades().size() > 0) {
@@ -50,10 +51,8 @@ public class TradeEvent {
 						event.getRareTrades().remove(0);
 					}
 				} else {
-					genericArray = new ArrayList<VillagerTrades.ITrade>(
-							Arrays.asList(VillagerTrades.WANDERING_TRADER_TRADES.get(1)));
-					rareArray = new ArrayList<VillagerTrades.ITrade>(
-							Arrays.asList(VillagerTrades.WANDERING_TRADER_TRADES.get(2)));
+					genericArray = new ArrayList<ITrade>(Arrays.asList(VillagerTrades.WANDERING_TRADER_TRADES.get(1)));
+					rareArray = new ArrayList<ITrade>(Arrays.asList(VillagerTrades.WANDERING_TRADER_TRADES.get(2)));
 				}
 
 				for (int i = 0; i < collection.trades.length; i++) {
@@ -68,8 +67,8 @@ public class TradeEvent {
 					}
 				}
 
-				VillagerTrades.ITrade[] genericTradeArray = new VillagerTrades.ITrade[genericArray.size()];
-				VillagerTrades.ITrade[] rareTradeArray = new VillagerTrades.ITrade[rareArray.size()];
+				ITrade[] genericTradeArray = new ITrade[genericArray.size()];
+				ITrade[] rareTradeArray = new ITrade[rareArray.size()];
 
 				for (int i = 0; i < genericArray.size(); i++) {
 					genericTradeArray[i] = genericArray.get(i);
