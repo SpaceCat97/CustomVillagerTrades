@@ -31,10 +31,6 @@ public class MyTradeItem {
 		this.itemKey = itemKey;
 		this.amount = amount;
 		this.priceModifier = priceModifier;
-
-		if (this.priceModifier == null) {
-			this.priceModifier = 0;
-		}
 	}
 
 	public int getPriceModifier() {
