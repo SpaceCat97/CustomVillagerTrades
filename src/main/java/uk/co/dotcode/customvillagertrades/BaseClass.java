@@ -1,8 +1,5 @@
 package uk.co.dotcode.customvillagertrades;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -16,8 +13,6 @@ import uk.co.dotcode.customvillagertrades.configs.TradeHandler;
 public class BaseClass {
 
 	public static final String MODID = "customvillagertrades";
-
-	public static final Logger LOGGER = LogManager.getLogger();
 
 	private TradeEvent tradeEvent;
 
