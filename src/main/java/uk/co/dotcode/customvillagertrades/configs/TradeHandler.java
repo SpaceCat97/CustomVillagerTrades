@@ -261,7 +261,6 @@ public class TradeHandler {
 		exampleOne.tradeExp = 3;
 		exampleOne.maxUses = 10;
 		exampleOne.priceMultiplier = 0.1f;
-		exampleOne.demand = 10;
 		exampleOne.tradeLevel = 1;
 
 		MyTrade exampleTwo = new MyTrade();
@@ -271,7 +270,6 @@ public class TradeHandler {
 		exampleTwo.tradeExp = 6;
 		exampleTwo.maxUses = 10;
 		exampleTwo.priceMultiplier = 0.1f;
-		exampleTwo.demand = 10;
 		exampleTwo.tradeLevel = 2;
 
 		MyTrade exampleThree = new MyTrade();
@@ -283,7 +281,6 @@ public class TradeHandler {
 		exampleThree.tradeExp = 15;
 		exampleThree.maxUses = 5;
 		exampleThree.priceMultiplier = 0.1f;
-		exampleThree.demand = 10;
 		exampleThree.tradeLevel = 3;
 
 		MyTrade exampleFour = new MyTrade();
@@ -296,7 +293,6 @@ public class TradeHandler {
 		exampleFour.tradeExp = 20;
 		exampleFour.maxUses = 5;
 		exampleFour.priceMultiplier = 0;
-		exampleFour.demand = 10;
 		exampleFour.tradeLevel = 4;
 
 		MyTrade exampleFive = new MyTrade();
@@ -310,7 +306,6 @@ public class TradeHandler {
 		exampleFive.tradeExp = 3;
 		exampleFive.maxUses = 10;
 		exampleFive.priceMultiplier = 0.1f;
-		exampleFive.demand = 10;
 		exampleFive.tradeLevel = 1;
 
 		MyTrade[] exampleTradeList = new MyTrade[5];
