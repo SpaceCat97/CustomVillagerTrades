@@ -18,13 +18,17 @@ public class MyTrade {
 	public int tradeExp;
 	public int maxUses;
 	public float priceMultiplier;
-	public int demand;
+	public Integer demand;
 
 	public int tradeLevel;
 
 	public MerchantOffer createTrade() {
 
 		MerchantOffer theTrade;
+
+		if (demand == null) {
+			demand = 0;
+		}
 
 		if (multiOffer != null) {
 			if (multiOffer.length > 0) {
