@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import uk.co.dotcode.customvillagertrades.configs.MyTrade;
@@ -85,35 +86,36 @@ public class TradeUtil {
 
 			// Enchantments
 
-			boolean offerProblem = false;
-			boolean multiOfferProblem = false;
-			boolean requestProblem = trade.request.checkEnchantments();
-			boolean additionalRequestProblem = false;
+			boolean offerEnchantProblem = false;
+			boolean multiOfferEnchantProblem = false;
+			boolean requestEnchantProblem = trade.request.checkEnchantments();
+			boolean additionalRequestEnchantProblem = false;
 
 			if (trade.offer != null) {
-				offerProblem = trade.offer.checkEnchantments();
+				offerEnchantProblem = trade.offer.checkEnchantments();
 			}
 
 			if (trade.multiOffer != null) {
 				for (MyTradeItem t : trade.multiOffer) {
 					if (t.checkEnchantments()) {
-						multiOfferProblem = true;
+						multiOfferEnchantProblem = true;
 					}
 				}
 			}
 
 			if (trade.additionalRequest != null) {
-				additionalRequestProblem = trade.additionalRequest.checkEnchantments();
+				additionalRequestEnchantProblem = trade.additionalRequest.checkEnchantments();
 			}
 
-			if (offerProblem || multiOfferProblem || requestProblem || additionalRequestProblem) {
+			if (offerEnchantProblem || multiOfferEnchantProblem || requestEnchantProblem
+					|| additionalRequestEnchantProblem) {
 				String key = "";
 
-				if (offerProblem) {
+				if (offerEnchantProblem) {
 					key = trade.offer.itemKey;
 				}
 
-				if (multiOfferProblem) {
+				if (multiOfferEnchantProblem) {
 					key = "multiOffer: ";
 					for (MyTradeItem t : trade.multiOffer) {
 						key += t.itemKey + ",";
@@ -122,6 +124,50 @@ public class TradeUtil {
 
 				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
 						"Unable to add a custom trade! Reason: invalid enchantment (listed above) - " + profession
+								+ ", entry number = " + i + ", item = " + key);
+
+				problem = true;
+			}
+
+			// Effects
+			boolean offerEffectProblem = false;
+			boolean multiOfferEffectProblem = false;
+			boolean requestEffectProblem = trade.request.checkEffects();
+			boolean additionalRequestEffectProblem = false;
+
+			if (trade.offer != null) {
+				offerEffectProblem = trade.offer.checkEffects();
+			}
+
+			if (trade.multiOffer != null) {
+				for (MyTradeItem t : trade.multiOffer) {
+					if (t.checkEffects()) {
+						multiOfferEffectProblem = true;
+					}
+				}
+			}
+
+			if (trade.additionalRequest != null) {
+				additionalRequestEffectProblem = trade.additionalRequest.checkEffects();
+			}
+
+			if (offerEffectProblem || multiOfferEffectProblem || requestEffectProblem
+					|| additionalRequestEffectProblem) {
+				String key = "";
+
+				if (offerEffectProblem) {
+					key = trade.offer.itemKey;
+				}
+
+				if (multiOfferEffectProblem) {
+					key = "multiOffer: ";
+					for (MyTradeItem t : trade.multiOffer) {
+						key += t.itemKey + ",";
+					}
+				}
+
+				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+						"Unable to add a custom trade! Reason: invalid effect (listed above) - " + profession
 								+ ", entry number = " + i + ", item = " + key);
 
 				problem = true;
@@ -194,6 +240,30 @@ public class TradeUtil {
 			Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(resourceLocation);
 
 			if (enchantment == null) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean isEffectReal(String effectKey) {
+		if (effectKey == null) {
+			LogManager.getLogger(BaseClass.MODID).log(Level.WARN, "Effect invalid - There's no effect key!");
+			return false;
+		}
+
+		if (effectKey.equalsIgnoreCase("random")) {
+			return true;
+		}
+
+		String[] splitLocation = effectKey.split(":");
+		if (splitLocation.length == 2) {
+			ResourceLocation resourceLocation = getResourceLocation(effectKey);
+			Effect effect = ForgeRegistries.POTIONS.getValue(resourceLocation);
+
+			if (effect == null) {
 				return false;
 			}
 		} else {
