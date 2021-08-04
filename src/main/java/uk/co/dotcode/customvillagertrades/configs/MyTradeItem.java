@@ -8,7 +8,9 @@ import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -16,7 +18,12 @@ import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.MapData;
+import net.minecraft.world.storage.MapDecoration;
 import net.minecraftforge.registries.ForgeRegistries;
 import uk.co.dotcode.customvillagertrades.BaseClass;
 import uk.co.dotcode.customvillagertrades.TradeUtil;
@@ -36,6 +43,8 @@ public class MyTradeItem {
 	public MyTradeEffect[] effects;
 	public String[] blacklistedEffects;
 
+	public String mapStructure;
+
 	public MyTradeItem(String itemKey, int amount, int priceModifier) {
 		this.itemKey = itemKey;
 		this.amount = amount;
@@ -49,7 +58,7 @@ public class MyTradeItem {
 		return priceModifier;
 	}
 
-	public ItemStack createItemStack(int modifier) {
+	public ItemStack createItemStack(int modifier, Entity entity) {
 		Item item = ForgeRegistries.ITEMS.getValue(TradeUtil.getResourceLocation(itemKey));
 
 		ItemStack stack = new ItemStack(item, amount + modifier);
@@ -65,6 +74,8 @@ public class MyTradeItem {
 		stack = processEnchantments(stack);
 
 		stack = processEffects(stack);
+
+		stack = processOther(stack, entity);
 
 		return stack;
 	}
@@ -136,6 +147,31 @@ public class MyTradeItem {
 		}
 
 		return false;
+	}
+
+	// For specific item modification
+	private ItemStack processOther(ItemStack stack, Entity entity) {
+		ItemStack modifiedStack = stack.copy();
+
+		if (stack.getItem() == Items.FILLED_MAP && mapStructure != null) {
+			Structure<?> destination = ForgeRegistries.STRUCTURE_FEATURES
+					.getValue(TradeUtil.getResourceLocation(mapStructure));
+
+			if (entity.level instanceof ServerWorld) {
+				ServerWorld serverworld = (ServerWorld) entity.level;
+				BlockPos blockpos = serverworld.findNearestMapFeature(destination, entity.blockPosition(), 100, true);
+
+				if (blockpos != null) {
+					ItemStack mapFilled = FilledMapItem.create(serverworld, blockpos.getX(), blockpos.getZ(), (byte) 2,
+							true, true);
+					FilledMapItem.renderBiomePreviewMap(serverworld, mapFilled);
+					MapData.addTargetDecoration(mapFilled, blockpos, "+", MapDecoration.Type.TARGET_POINT);
+					modifiedStack = mapFilled;
+				}
+			}
+		}
+
+		return modifiedStack;
 	}
 
 	private ItemStack processEnchantments(ItemStack stack) {

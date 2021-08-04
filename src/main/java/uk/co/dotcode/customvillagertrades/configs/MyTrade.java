@@ -3,6 +3,7 @@ package uk.co.dotcode.customvillagertrades.configs;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MerchantOffer;
 import uk.co.dotcode.customvillagertrades.BaseClass;
@@ -22,7 +23,7 @@ public class MyTrade {
 
 	public int tradeLevel;
 
-	public MerchantOffer createTrade() {
+	public MerchantOffer createTrade(Entity entity) {
 
 		MerchantOffer theTrade;
 
@@ -45,12 +46,12 @@ public class MyTrade {
 		}
 
 		if (additionalRequest != null) {
-			theTrade = new MerchantOffer(request.createItemStack(offer.getPriceModifier()),
-					additionalRequest.createItemStack(offer.getPriceModifier()), offer.createItemStack(0), 0, maxUses,
-					tradeExp, priceMultiplier, demand);
+			theTrade = new MerchantOffer(request.createItemStack(offer.getPriceModifier(), entity),
+					additionalRequest.createItemStack(offer.getPriceModifier(), entity),
+					offer.createItemStack(0, entity), 0, maxUses, tradeExp, priceMultiplier, demand);
 		} else {
-			theTrade = new MerchantOffer(request.createItemStack(offer.getPriceModifier()), ItemStack.EMPTY,
-					offer.createItemStack(0), 0, maxUses, tradeExp, priceMultiplier, demand);
+			theTrade = new MerchantOffer(request.createItemStack(offer.getPriceModifier(), entity), ItemStack.EMPTY,
+					offer.createItemStack(0, entity), 0, maxUses, tradeExp, priceMultiplier, demand);
 		}
 
 		return theTrade;

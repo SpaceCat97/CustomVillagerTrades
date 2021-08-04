@@ -17,7 +17,7 @@ public class MyTradeConverted implements ITrade {
 	
 	@Override
 	public MerchantOffer getOffer(Entity entity, Random rand) {
-		return trade.createTrade();
+		return trade.createTrade(entity);
 	}
 
 }
