@@ -19,20 +19,24 @@ import uk.co.dotcode.customvillagertrades.configs.WandererTradeCollection;
 
 public class TradeEvent {
 
+	private TradeCollection tradeCollection;
+	private TradeCollection tradeCollectionAll;
+	private WandererTradeCollection tradeCollectionWanderer;
+
 	@SubscribeEvent
 	public void registerWanderingTrades(WandererTradesEvent event) {
-		WandererTradeCollection collection = TradeHandler.loadWandererTrades("wanderer");
+		tradeCollectionWanderer = TradeHandler.loadWandererTrades("wanderer");
 
-		if (collection != null) {
-			boolean problem = TradeUtil.checkTradeCollection(collection);
+		if (tradeCollectionWanderer != null) {
+			boolean problem = TradeUtil.checkTradeCollection(tradeCollectionWanderer);
 
-			if (collection.numberOfGenericTrades() < 5) {
+			if (tradeCollectionWanderer.numberOfGenericTrades() < 5) {
 				LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
 						"You must have at least 5 'not-rare' trades for the wanderer!");
 				problem = true;
 			}
 
-			if (collection.numberOfRareTrades() < 1) {
+			if (tradeCollectionWanderer.numberOfRareTrades() < 1) {
 				LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
 						"You must have at least 1 'rare' trade for the wanderer!");
 				problem = true;
@@ -42,7 +46,7 @@ public class TradeEvent {
 				ArrayList<ITrade> genericArray = new ArrayList<ITrade>();
 				ArrayList<ITrade> rareArray = new ArrayList<ITrade>();
 
-				if (collection.removeOtherTrades) {
+				if (tradeCollectionWanderer.removeOtherTrades) {
 					while (event.getGenericTrades().size() > 0) {
 						event.getGenericTrades().remove(0);
 					}
@@ -55,10 +59,10 @@ public class TradeEvent {
 					rareArray = new ArrayList<ITrade>(Arrays.asList(VillagerTrades.WANDERING_TRADER_TRADES.get(2)));
 				}
 
-				for (int i = 0; i < collection.trades.length; i++) {
-					MyTradeConverted convertedTrade = new MyTradeConverted(collection.trades[i]);
+				for (int i = 0; i < tradeCollectionWanderer.trades.length; i++) {
+					MyTradeConverted convertedTrade = new MyTradeConverted(tradeCollectionWanderer.trades[i]);
 
-					if (collection.trades[i].isRare) {
+					if (tradeCollectionWanderer.trades[i].isRare) {
 						event.getRareTrades().add(convertedTrade);
 						rareArray.add(convertedTrade);
 					} else {
@@ -93,14 +97,14 @@ public class TradeEvent {
 	@SubscribeEvent
 	public void registerTrades(VillagerTradesEvent event) {
 		if (event.getType() != VillagerProfession.NONE) {
-			TradeCollection collection = TradeHandler.loadTrades(event.getType().toString());
-			TradeCollection collectionAll = TradeHandler.loadTrades("all");
+			tradeCollection = TradeHandler.loadTrades(event.getType().toString());
+			tradeCollectionAll = TradeHandler.loadTrades("all");
 
-			if (collection != null) {
-				boolean problem = TradeUtil.checkTradeCollection(collection);
+			if (tradeCollection != null) {
+				boolean problem = TradeUtil.checkTradeCollection(tradeCollection);
 
 				if (!problem) {
-					if (collection.removeOtherTrades) {
+					if (tradeCollection.removeOtherTrades) {
 						for (int level = 1; level <= 5; level++) {
 							while (event.getTrades().get(level).size() > 0) {
 								event.getTrades().get(level).remove(0);
@@ -108,8 +112,8 @@ public class TradeEvent {
 						}
 					}
 
-					for (int i = 0; i < collection.trades.length; i++) {
-						MyTrade currentTrade = collection.trades[i];
+					for (int i = 0; i < tradeCollection.trades.length; i++) {
+						MyTrade currentTrade = tradeCollection.trades[i];
 
 						event.getTrades().get(currentTrade.tradeLevel).add(new MyTradeConverted(currentTrade));
 					}
@@ -119,12 +123,12 @@ public class TradeEvent {
 				}
 			}
 
-			if (collectionAll != null) {
-				boolean problemAll = TradeUtil.checkTradeCollection(collectionAll);
+			if (tradeCollectionAll != null) {
+				boolean problemAll = TradeUtil.checkTradeCollection(tradeCollectionAll);
 
 				if (!problemAll) {
-					for (int i = 0; i < collectionAll.trades.length; i++) {
-						MyTrade currentTrade = collectionAll.trades[i];
+					for (int i = 0; i < tradeCollectionAll.trades.length; i++) {
+						MyTrade currentTrade = tradeCollectionAll.trades[i];
 
 						event.getTrades().get(currentTrade.tradeLevel).add(new MyTradeConverted(currentTrade));
 					}
