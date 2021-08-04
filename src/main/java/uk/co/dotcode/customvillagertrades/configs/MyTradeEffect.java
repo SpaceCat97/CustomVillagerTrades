@@ -10,7 +10,21 @@ public class MyTradeEffect {
 	public String effectKey;
 	public Integer duration; // In ticks
 	public Integer level;
-	public boolean isVisible;
+	public Boolean isVisible;
+
+	public MyTradeEffect() {
+		if (duration == null) {
+			duration = 300;
+		}
+
+		if (level == null) {
+			level = 1;
+		}
+
+		if (isVisible == null) {
+			isVisible = true;
+		}
+	}
 
 	public Effect getEffect(String key) {
 		return ForgeRegistries.POTIONS.getValue(TradeUtil.getResourceLocation(key));
