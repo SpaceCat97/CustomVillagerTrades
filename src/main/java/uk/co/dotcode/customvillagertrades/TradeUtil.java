@@ -13,6 +13,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import uk.co.dotcode.customvillagertrades.configs.MyTrade;
@@ -264,6 +265,30 @@ public class TradeUtil {
 			Effect effect = ForgeRegistries.POTIONS.getValue(resourceLocation);
 
 			if (effect == null) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean isPotionReal(String potionKey) {
+		if (potionKey == null) {
+			LogManager.getLogger(BaseClass.MODID).log(Level.WARN, "Potion invalid - There's no potion key!");
+			return false;
+		}
+
+		if (potionKey.equalsIgnoreCase("random")) {
+			return true;
+		}
+
+		String[] splitLocation = potionKey.split(":");
+		if (splitLocation.length == 2) {
+			ResourceLocation resourceLocation = getResourceLocation(potionKey);
+			Potion potion = ForgeRegistries.POTION_TYPES.getValue(resourceLocation);
+
+			if (potion.getRegistryName().toString().equalsIgnoreCase("minecraft:empty")) {
 				return false;
 			}
 		} else {

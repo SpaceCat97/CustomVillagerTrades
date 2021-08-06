@@ -2,6 +2,7 @@ package uk.co.dotcode.customvillagertrades.configs;
 
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Potion;
 import net.minecraftforge.registries.ForgeRegistries;
 import uk.co.dotcode.customvillagertrades.TradeUtil;
 
@@ -11,6 +12,8 @@ public class MyTradeEffect {
 	public Integer duration; // In ticks
 	public Integer level;
 	public Boolean isVisible;
+	public String potionKey;
+	public String[] blacklistedPotionKeys;
 
 	public MyTradeEffect() {
 		if (duration == null) {
@@ -24,6 +27,14 @@ public class MyTradeEffect {
 		if (isVisible == null) {
 			isVisible = true;
 		}
+
+		if (potionKey == null) {
+			potionKey = "minecraft:empty";
+		}
+	}
+
+	public Potion getPotionKey(String key) {
+		return ForgeRegistries.POTION_TYPES.getValue(TradeUtil.getResourceLocation(key));
 	}
 
 	public Effect getEffect(String key) {

@@ -1,7 +1,8 @@
 package uk.co.dotcode.customvillagertrades.configs;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +18,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
@@ -73,7 +75,9 @@ public class MyTradeItem {
 
 		stack = processEnchantments(stack);
 
-		stack = processEffects(stack);
+		if (!itemKey.equalsIgnoreCase("minecraft:tipped_arrow")) {
+			stack = processEffects(stack, entity);
+		}
 
 		stack = processOther(stack, entity);
 
@@ -81,29 +85,51 @@ public class MyTradeItem {
 	}
 
 	public boolean checkEffects() {
-		if (effects != null && effects.length > 0) {
-			for (int i = 0; i < effects.length; i++) {
-				boolean check = TradeUtil.isEffectReal(effects[i].effectKey);
-
-				if (!check) {
-					LogManager.getLogger(BaseClass.MODID).log(Level.WARN, "Effect invalid - " + effects[i]);
-					return true;
-				}
-			}
-		}
-
-		if (blacklistedEffects != null && blacklistedEffects.length > 0) {
-			for (int i = 0; i < blacklistedEffects.length; i++) {
-				boolean check = TradeUtil.isEffectReal(blacklistedEffects[i]);
-
-				if (!check) {
+		if (itemKey.equalsIgnoreCase("minecraft:tipped_arrow")) {
+			if (!effects[0].potionKey.equalsIgnoreCase("random")) {
+				if (!TradeUtil.isPotionReal(effects[0].potionKey)) {
 					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-							"Blacklisted Effect invalid - " + blacklistedEffects[i]);
+							"Potion invalid - " + effects[0] + " - " + effects[0].potionKey);
 					return true;
 				}
 			}
-		}
 
+			if (effects[0].blacklistedPotionKeys != null) {
+				for (String s : effects[0].blacklistedPotionKeys) {
+					boolean check = TradeUtil.isPotionReal(s);
+
+					if (!check) {
+						LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+								"Potion invalid - " + effects[0] + " - " + s);
+						return true;
+					}
+				}
+			}
+		} else {
+
+			if (effects != null && effects.length > 0) {
+				for (int i = 0; i < effects.length; i++) {
+					boolean check = TradeUtil.isEffectReal(effects[i].effectKey);
+
+					if (!check) {
+						LogManager.getLogger(BaseClass.MODID).log(Level.WARN, "Effect invalid - " + effects[i]);
+						return true;
+					}
+				}
+			}
+
+			if (blacklistedEffects != null && blacklistedEffects.length > 0) {
+				for (int i = 0; i < blacklistedEffects.length; i++) {
+					boolean check = TradeUtil.isEffectReal(blacklistedEffects[i]);
+
+					if (!check) {
+						LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+								"Blacklisted Effect invalid - " + blacklistedEffects[i]);
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
@@ -171,7 +197,55 @@ public class MyTradeItem {
 			}
 		}
 
+		if (stack.getItem() == Items.TIPPED_ARROW) {
+			Potion selectedPotion = null;
+
+			ItemStack potionStack = stack.copy();
+
+			if (effects[0].potionKey.equalsIgnoreCase("random")) {
+				ArrayList<Potion> possiblePotions = new ArrayList<Potion>();
+
+				List<Potion> list = ForgeRegistries.POTION_TYPES.getValues().stream().collect(Collectors.toList());
+
+				for (Potion p : list) {
+					boolean blacklisted = false;
+
+					if (effects[0].blacklistedPotionKeys != null) {
+						for (String blacklistString : effects[0].blacklistedPotionKeys) {
+							if (p.getRegistryName().toString().equalsIgnoreCase(blacklistString)
+									|| p.getRegistryName().toString().equalsIgnoreCase("minecraft:awkward")
+									|| p.getRegistryName().toString().equalsIgnoreCase("minecraft:empty")
+									|| p.getRegistryName().toString().equalsIgnoreCase("minecraft:mundane")) {
+								blacklisted = true;
+							}
+						}
+					}
+
+					if (!blacklisted) {
+						possiblePotions.add(p);
+					}
+				}
+
+				int random = TradeUtil.random.nextInt(possiblePotions.size());
+
+				selectedPotion = possiblePotions.get(random);
+			} else {
+				for (Potion p : ForgeRegistries.POTION_TYPES) {
+					if (p.getRegistryName().toString().equalsIgnoreCase(effects[0].potionKey)) {
+						selectedPotion = p;
+						break;
+					}
+				}
+			}
+
+			if (selectedPotion != null) {
+				PotionUtils.setPotion(potionStack, selectedPotion);
+				modifiedStack = potionStack;
+			}
+		}
+
 		return modifiedStack;
+
 	}
 
 	private ItemStack processEnchantments(ItemStack stack) {
@@ -241,11 +315,11 @@ public class MyTradeItem {
 		return enchantedStack;
 	}
 
-	private ItemStack processEffects(ItemStack stack) {
+	private ItemStack processEffects(ItemStack stack, Entity entity) {
 		ItemStack effectStack = stack.copy();
 
 		if (effects != null) {
-			Collection<EffectInstance> effectsToApply = new ArrayList<EffectInstance>();
+			ArrayList<EffectInstance> effectsToApply = new ArrayList<EffectInstance>();
 
 			for (int i = 0; i < effects.length; i++) {
 				if (effects[i].effectKey.equalsIgnoreCase("random")) {
@@ -266,8 +340,8 @@ public class MyTradeItem {
 						}
 					}
 
-					effectsToApply.add(new EffectInstance(
-							availableRandomEffects.get(TradeUtil.random.nextInt(availableRandomEffects.size()))));
+					effectsToApply
+							.add(availableRandomEffects.get(TradeUtil.random.nextInt(availableRandomEffects.size())));
 
 				} else if (effects[i].effectKey.contains("#")) {
 					String[] effectChoices = effects[i].effectKey.split("#");
@@ -288,7 +362,6 @@ public class MyTradeItem {
 				}
 			}
 		}
-
 		return effectStack;
 	}
 
