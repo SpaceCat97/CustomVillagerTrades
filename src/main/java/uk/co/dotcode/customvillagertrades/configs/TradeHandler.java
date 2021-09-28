@@ -101,7 +101,7 @@ public class TradeHandler {
 		} catch (JsonSyntaxException e) {
 			LogManager.getLogger(BaseClass.MODID).log(Level.ERROR, "A problem has been found with the config file for '"
 					+ profession
-					+ "'! This is most likely a formatting issue - take a look over the config for anything that seems out of place (or use a JSON verifier).");
+					+ "'! This is most likely a formatting issue - take a look over the config for anything that seems out of place (and use a JSON verifier) - Everything needs to match the specification in the mod description.");
 		}
 
 		if (isWanderer) {
