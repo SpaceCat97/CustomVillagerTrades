@@ -37,6 +37,10 @@ public class MyTradeItem {
 	public Integer amount;
 	public Integer priceModifier;
 
+	public Integer customColourR;
+	public Integer customColourG;
+	public Integer customColourB;
+
 	public Integer metadata;
 
 	public MyTradeEnchantment[] enchantments;
@@ -44,6 +48,8 @@ public class MyTradeItem {
 	public String[] blacklistedEnchantments;
 	public MyTradeEffect[] effects;
 	public String[] blacklistedEffects;
+
+	public NBTData[] nbtTags;
 
 	public String mapStructure;
 
@@ -65,6 +71,8 @@ public class MyTradeItem {
 
 		ItemStack stack = new ItemStack(item, amount + modifier);
 
+		stack = processOther(stack, entity);
+
 		if (metadata != null) {
 			stack.setDamageValue(metadata);
 		}
@@ -75,13 +83,41 @@ public class MyTradeItem {
 
 		stack = processEnchantments(stack);
 
+		processCustomColour(stack);
+
 		if (!itemKey.equalsIgnoreCase("minecraft:tipped_arrow")) {
 			stack = processEffects(stack, entity);
 		}
 
-		stack = processOther(stack, entity);
+		if (!itemKey.equalsIgnoreCase("minecraft:potion")) {
+			stack = processNBTData(stack);
+		}
 
 		return stack;
+	}
+
+	private void processCustomColour(ItemStack stack) {
+		if (itemKey.equalsIgnoreCase("minecraft:tipped_arrow") || itemKey.equalsIgnoreCase("minecraft:potion")) {
+
+			if (customColourR == null) {
+				customColourR = 255;
+			}
+
+			if (customColourG == null) {
+				customColourG = 0;
+			}
+
+			if (customColourB == null) {
+				customColourB = 255;
+			}
+
+			NBTData colourNBT = new NBTData();
+			colourNBT.nbtName = "CustomPotionColor";
+			colourNBT.dataType = "Integer";
+			colourNBT.data = Integer.toString(TradeUtil.getIntFromColor(customColourR, customColourG, customColourB));
+
+			stack.getOrCreateTag().merge(colourNBT.getTag());
+		}
 	}
 
 	public boolean checkEffects() {
@@ -112,7 +148,8 @@ public class MyTradeItem {
 					boolean check = TradeUtil.isEffectReal(effects[i].effectKey);
 
 					if (!check) {
-						LogManager.getLogger(BaseClass.MODID).log(Level.WARN, "Effect invalid - " + effects[i]);
+						LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+								"Effect invalid - " + effects[i].effectKey);
 						return true;
 					}
 				}
@@ -313,6 +350,18 @@ public class MyTradeItem {
 		}
 
 		return enchantedStack;
+	}
+
+	private ItemStack processNBTData(ItemStack stack) {
+		ItemStack nbtStack = stack.copy();
+
+		if (nbtTags != null) {
+			for (NBTData nbt : nbtTags) {
+				nbtStack.getOrCreateTag().merge(nbt.getTag());
+			}
+		}
+
+		return nbtStack;
 	}
 
 	private ItemStack processEffects(ItemStack stack, Entity entity) {

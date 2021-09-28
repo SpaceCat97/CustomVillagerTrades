@@ -459,4 +459,11 @@ public class TradeUtil {
 		return new ResourceLocation(splitLocation[0], splitLocation[1]);
 	}
 
+	public static int getIntFromColor(int r, int g, int b) {
+		int rgb = r;
+		rgb = (rgb << 8) + g;
+		rgb = (rgb << 8) + b;
+
+		return rgb;
+	}
 }
