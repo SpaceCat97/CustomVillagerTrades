@@ -30,16 +30,18 @@ public class TradeEvent {
 		if (tradeCollectionWanderer != null) {
 			boolean problem = TradeUtil.checkTradeCollection(tradeCollectionWanderer);
 
-			if (tradeCollectionWanderer.numberOfGenericTrades() < 5) {
-				LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
-						"You must have at least 5 'not-rare' trades for the wanderer!");
-				problem = true;
-			}
+			if (tradeCollectionWanderer.removeOtherTrades) {
+				if (tradeCollectionWanderer.numberOfGenericTrades() < 5) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
+							"You must have at least 5 'not-rare' trades for the wanderer!");
+					problem = true;
+				}
 
-			if (tradeCollectionWanderer.numberOfRareTrades() < 1) {
-				LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
-						"You must have at least 1 'rare' trade for the wanderer!");
-				problem = true;
+				if (tradeCollectionWanderer.numberOfRareTrades() < 1) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
+							"You must have at least 1 'rare' trade for the wanderer!");
+					problem = true;
+				}
 			}
 
 			if (!problem) {
