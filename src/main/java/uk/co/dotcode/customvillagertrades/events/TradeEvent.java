@@ -1,4 +1,4 @@
-package uk.co.dotcode.customvillagertrades;
+package uk.co.dotcode.customvillagertrades.events;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +12,9 @@ import net.minecraft.entity.merchant.villager.VillagerTrades.ITrade;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import uk.co.dotcode.customvillagertrades.BaseClass;
+import uk.co.dotcode.customvillagertrades.MyTradeConverted;
+import uk.co.dotcode.customvillagertrades.TradeUtil;
 import uk.co.dotcode.customvillagertrades.configs.MyTrade;
 import uk.co.dotcode.customvillagertrades.configs.TradeCollection;
 import uk.co.dotcode.customvillagertrades.configs.TradeHandler;

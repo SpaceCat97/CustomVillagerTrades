@@ -1,4 +1,4 @@
-package uk.co.dotcode.customvillagertrades;
+package uk.co.dotcode.customvillagertrades.events;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -41,8 +41,6 @@ public class ModifyGuiEvent {
 					upPressed = true;
 				} else if (upPressed) {
 					upPressed = false;
-
-					System.out.println(lastInteractedVillager);
 
 					if (lastInteractedVillager.getVillagerData().getLevel() < 5) {
 						PacketHandler

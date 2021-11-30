@@ -28,4 +28,8 @@ public class WandererTradeCollection {
 		return count;
 	}
 
+	public WandererTradeCollection build() {
+		return this;
+	}
+
 }
