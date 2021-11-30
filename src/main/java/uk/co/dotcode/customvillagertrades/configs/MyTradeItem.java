@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.Entity;
@@ -16,6 +18,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SuspiciousStewItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
@@ -50,6 +54,7 @@ public class MyTradeItem {
 	public String[] blacklistedEffects;
 
 	public NBTData[] nbtTags;
+	public String advancedNBTData;
 
 	public String mapStructure;
 
@@ -354,6 +359,19 @@ public class MyTradeItem {
 
 	private ItemStack processNBTData(ItemStack stack) {
 		ItemStack nbtStack = stack.copy();
+
+		if (advancedNBTData != null && !advancedNBTData.isEmpty()) {
+			try {
+				CompoundNBT advancedNBT = JsonToNBT.parseTag(advancedNBTData);
+
+				nbtStack.getOrCreateTag().merge(advancedNBT);
+
+			} catch (CommandSyntaxException e) {
+				e.printStackTrace();
+				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+						"There was an error adding an advanced NBT to item: " + advancedNBTData);
+			}
+		}
 
 		if (nbtTags != null) {
 			for (NBTData nbt : nbtTags) {
