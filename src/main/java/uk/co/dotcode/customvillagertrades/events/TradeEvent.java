@@ -11,6 +11,7 @@ import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.merchant.villager.VillagerTrades.ITrade;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import uk.co.dotcode.customvillagertrades.BaseClass;
 import uk.co.dotcode.customvillagertrades.MyTradeConverted;
@@ -26,7 +27,7 @@ public class TradeEvent {
 	private TradeCollection tradeCollectionAll;
 	private WandererTradeCollection tradeCollectionWanderer;
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void registerWanderingTrades(WandererTradesEvent event) {
 		tradeCollectionWanderer = TradeHandler.loadWandererTrades("wanderer");
 
@@ -99,7 +100,7 @@ public class TradeEvent {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void registerTrades(VillagerTradesEvent event) {
 		if (event.getType() != VillagerProfession.NONE) {
 			tradeCollection = TradeHandler.loadTrades(event.getType().toString());
