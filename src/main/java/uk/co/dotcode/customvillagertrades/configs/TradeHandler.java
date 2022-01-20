@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
@@ -80,27 +79,30 @@ public class TradeHandler {
 	}
 
 	private static void loadFile(Gson gson, File f, boolean isWanderer) {
-		String profession = FilenameUtils.removeExtension(f.getName());
+		String currentProfession = "INVALID";
 
-		LogManager.getLogger(BaseClass.MODID).log(Level.INFO, "Loading custom villager trades for: " + profession);
+		LogManager.getLogger(BaseClass.MODID).log(Level.INFO,
+				"Loading custom villager trades from file: " + f.getName());
 
 		try (Reader reader = new FileReader(f)) {
 			if (isWanderer) {
 				WandererTradeCollection coll = gson.fromJson(reader, WandererTradeCollection.class);
-				customWandererTrades.put(profession, coll);
+				currentProfession = coll.profession.toLowerCase();
+				customWandererTrades.put(currentProfession, coll);
 			} else {
 				TradeCollection coll = gson.fromJson(reader, TradeCollection.class);
-				customTrades.put(profession, coll);
+				currentProfession = coll.profession.toLowerCase();
+				customTrades.put(currentProfession, coll);
 			}
 
 		} catch (IOException e) {
 			LogManager.getLogger(BaseClass.MODID).log(Level.ERROR, "A problem has been found with the config file for '"
-					+ profession
+					+ currentProfession
 					+ "'! This is most likely an issue where the file can not be found/accessed (which should never happen...)");
 			e.printStackTrace();
 		} catch (JsonSyntaxException e) {
 			LogManager.getLogger(BaseClass.MODID).log(Level.ERROR, "A problem has been found with the config file for '"
-					+ profession
+					+ currentProfession
 					+ "'! This is most likely a formatting issue - take a look over the config for anything that seems out of place (and use a JSON verifier) - Everything needs to match the specification in the mod description.");
 		}
 
