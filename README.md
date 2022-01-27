@@ -8,7 +8,9 @@ Ideal for ModPack authors, it uses JSON filetypes to allow you to create and cus
 
 When first loaded, this mod will generate example trades for the armorer profession.
 
+
 HOW DOES IT WORK?
+
 This mod reads json files from the "config/custom villager trades" directory. The directory will be created (with an example file) when you load the mod for the first time (and if no config files are present).
 The profession modified will depend on what you put inside the file.
 After getting the trades, it will inject in to the villager trade event provided by forge (exactly how other mods do it), the only difference is you can create the trade exactly how you want it.
