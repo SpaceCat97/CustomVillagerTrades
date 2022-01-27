@@ -9,6 +9,7 @@ Ideal for ModPack authors, it uses JSON filetypes to allow you to create and cus
 When first loaded, this mod will generate example trades for the armorer profession.
 
 
+
 HOW DOES IT WORK?
 
 This mod reads json files from the "config/custom villager trades" directory. The directory will be created (with an example file) when you load the mod for the first time (and if no config files are present).
@@ -17,6 +18,7 @@ After getting the trades, it will inject in to the villager trade event provided
 The event is set as "LOWEST" priority. This means that it should run last (allowing you to overwrite modded trades - no promises!).
 The mod will perform a check on each trade to make sure they are valid. If there are any problems it will then report this on the console.
 The file must be built as specified in the wiki. Examples are provided.
+
 
 
 FEATURES
@@ -43,6 +45,7 @@ FEATURES
 
 
 WARNINGS / FAQ
+
 Note that this mod does not give you the option to create trades for villagers who have no profession/unemployed.
 Your trade is not guaranteed to appear every time - this is because of the trade pools. You can remove all existing trades.
 If you are unsure what the item ID is, press f3+h ingame to enable tooltips and hover over the item you want to add.
@@ -51,11 +54,14 @@ If you remove a trade that a villager already has, the villager will still keep 
 The wanderer must have a minimum of 5 "common" and 1 "rare" trades.
 
 
+
 "MY TRADE IS NOT APPEARING"
+
 If your config entry is not created properly, the mod will throw a warning explaining what is wrong with that entry. It will then try to add the rest of the trades.
 This is an example of what you would see if there is a problem:
 [14:26:03] [Worker-Main-9/INFO] [customvillagertrades/]: Checking custom villager trades...
 [14:26:03] [Worker-Main-9/WARN] [customvillagertrades/]: Unable to add a custom trade! Reason: item/block does not exist - dotcoinmod:ironcoin
 [14:26:03] [Worker-Main-9/INFO] [customvillagertrades/]: Check complete!
+
 
 If you don't know the JSON language, please take the time to learn it before coming to me with problems - it is an easy language to learn, read and understand.
