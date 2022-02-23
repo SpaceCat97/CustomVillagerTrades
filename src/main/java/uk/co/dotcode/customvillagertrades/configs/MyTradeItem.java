@@ -409,9 +409,10 @@ public class MyTradeItem {
 						}
 					}
 
-					effectsToApply
-							.add(availableRandomEffects.get(TradeUtil.random.nextInt(availableRandomEffects.size())));
-
+					if (availableRandomEffects.size() > 0) {
+						effectsToApply.add(
+								availableRandomEffects.get(TradeUtil.random.nextInt(availableRandomEffects.size())));
+					}
 				} else if (effects[i].effectKey.contains("#")) {
 					String[] effectChoices = effects[i].effectKey.split("#");
 
