@@ -24,8 +24,7 @@ public class CommandRefresh {
 		BaseClass.tradeEvent.reload();
 
 		commandContext.getSource().getServer().getPlayerList().broadcastMessage(
-				new StringTextComponent("Reloaded villager trades - see log for errors."), ChatType.CHAT,
-				commandContext.getSource().getEntity().getUUID());
+				new StringTextComponent("Reloaded villager trades - see log for errors."), ChatType.CHAT, null);
 		return 1;
 	}
 
