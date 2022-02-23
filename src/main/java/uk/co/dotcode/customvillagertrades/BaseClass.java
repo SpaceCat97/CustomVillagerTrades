@@ -8,8 +8,9 @@ import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import uk.co.dotcode.customvillagertrades.configs.TradeHandler;
-import uk.co.dotcode.customvillagertrades.events.MyIMCEvent;
+import uk.co.dotcode.customvillagertrades.events.MyCommandEvent;
 import uk.co.dotcode.customvillagertrades.events.ModifyGuiEvent;
+import uk.co.dotcode.customvillagertrades.events.MyIMCEvent;
 import uk.co.dotcode.customvillagertrades.events.TradeEvent;
 import uk.co.dotcode.customvillagertrades.packet.PacketHandler;
 
@@ -18,14 +19,16 @@ public class BaseClass {
 
 	public static final String MODID = "customvillagertrades";
 
-	private TradeEvent tradeEvent;
+	public static TradeEvent tradeEvent;
 	private ModifyGuiEvent modifyGuiEvent;
 	private MyIMCEvent imcEvent;
+	private MyCommandEvent commandEvent;
 
 	public BaseClass() {
 		tradeEvent = new TradeEvent();
 		modifyGuiEvent = new ModifyGuiEvent();
 		imcEvent = new MyIMCEvent();
+		commandEvent = new MyCommandEvent();
 
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		ModLoadingContext.get().registerConfig(Type.COMMON, CustomTradeConfigOld.CONFIG_SPEC);
@@ -35,6 +38,7 @@ public class BaseClass {
 
 		MinecraftForge.EVENT_BUS.register(tradeEvent);
 		MinecraftForge.EVENT_BUS.register(modifyGuiEvent);
+		MinecraftForge.EVENT_BUS.register(commandEvent);
 
 		PacketHandler.register();
 	}
