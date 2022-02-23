@@ -327,10 +327,12 @@ public class MyTradeItem {
 						}
 					}
 
-					addEnchantmentMyWay(enchantedStack,
-							availableRandomEnchantments
-									.get(TradeUtil.random.nextInt(availableRandomEnchantments.size())),
-							enchantments[i].enchantmentLevel, enchantments[i].maxEnchantmentLevel);
+					if (availableRandomEnchantments.size() > 0) {
+						addEnchantmentMyWay(enchantedStack,
+								availableRandomEnchantments
+										.get(TradeUtil.random.nextInt(availableRandomEnchantments.size())),
+								enchantments[i].enchantmentLevel, enchantments[i].maxEnchantmentLevel);
+					}
 				} else if (enchantments[i].enchantmentKey.contains("#")) {
 					String[] enchantmentChoices = enchantments[i].enchantmentKey.split("#");
 
