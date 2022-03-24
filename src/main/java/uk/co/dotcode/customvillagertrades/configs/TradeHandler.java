@@ -112,14 +112,24 @@ public class TradeHandler {
 			while (it.hasNext()) {
 				Map.Entry<String, WandererTradeCollection> entry = (Map.Entry<String, WandererTradeCollection>) it
 						.next();
-				TradeUtil.checkTradeCollection(entry.getValue());
+				boolean failed = TradeUtil.checkTradeCollection(entry.getValue());
+				if (failed) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
+							"There is a problem with a trade config file! Source: " + entry.getValue().source
+									+ ", Profession: " + entry.getValue().profession);
+				}
 			}
 		} else {
 			Iterator<Entry<String, TradeCollection>> it = customTrades.entrySet().iterator();
 
 			while (it.hasNext()) {
 				Map.Entry<String, TradeCollection> entry = (Map.Entry<String, TradeCollection>) it.next();
-				TradeUtil.checkTradeCollection(entry.getValue());
+				boolean failed = TradeUtil.checkTradeCollection(entry.getValue());
+				if (failed) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.ERROR,
+							"There is a problem with a trade config file! Source: " + entry.getValue().source
+									+ ", Profession: " + entry.getValue().profession);
+				}
 			}
 		}
 	}

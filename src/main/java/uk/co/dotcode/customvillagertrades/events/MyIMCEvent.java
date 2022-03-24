@@ -43,6 +43,8 @@ public class MyIMCEvent {
 			if (messageObject instanceof TradeCollection) {
 				TradeCollection toAdd = (TradeCollection) messageObject;
 
+				toAdd.source = msg.getSenderModId();
+
 				// This is correct, because the method below returns false if no problems.
 				// Yes, it is sloppy. No, I dont care.
 				if (!TradeUtil.checkTradeCollection(toAdd)) {
@@ -58,6 +60,8 @@ public class MyIMCEvent {
 				}
 			} else if (messageObject instanceof WandererTradeCollection) {
 				WandererTradeCollection toAdd = (WandererTradeCollection) messageObject;
+
+				toAdd.source = msg.getSenderModId();
 
 				// See comment above...
 				if (!TradeUtil.checkTradeCollection(toAdd)) {
