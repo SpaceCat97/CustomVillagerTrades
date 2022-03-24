@@ -179,6 +179,7 @@ public class TradeUtil {
 				LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
 						"Unable to add a custom trade! Reason: invalid trade level. Use a number between 1 and 5 - "
 								+ profession + ", entry number = " + i + ", level = " + trade.tradeLevel);
+				problem = true;
 			}
 
 		}
