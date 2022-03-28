@@ -126,11 +126,12 @@ public class TradeEvent {
 					for (int i = 0; i < tradeCollection.trades.length; i++) {
 						MyTrade currentTrade = tradeCollection.trades[i];
 
-						if (currentTrade.tradeLevel < 1 || currentTrade.tradeLevel > 5) {
+						if (currentTrade.tradeLevel > 0 && currentTrade.tradeLevel < 6) {
 							event.getTrades().get(currentTrade.tradeLevel).add(new MyTradeConverted(currentTrade));
 						} else {
 							LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
-									"There was an invalid trade config for " + event.getType().toString() + " file! Defaulted to trade level 1.");
+									"There was an invalid trade config for " + event.getType().toString()
+											+ " file! Defaulted to trade level 1.");
 							event.getTrades().get(1).add(new MyTradeConverted(currentTrade));
 						}
 					}
