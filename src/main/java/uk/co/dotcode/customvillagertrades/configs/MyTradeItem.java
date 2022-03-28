@@ -20,6 +20,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
@@ -296,43 +297,9 @@ public class MyTradeItem {
 		if (enchantments != null) {
 			for (int i = 0; i < enchantments.length; i++) {
 				if (enchantments[i].enchantmentKey.equalsIgnoreCase("random")) {
-					ArrayList<Enchantment> availableRandomEnchantments = new ArrayList<Enchantment>();
+					addEnchantmentMyWay(enchantedStack, generateTrueRandomEnchantment(enchantedStack),
+							enchantments[i].enchantmentLevel, enchantments[i].maxEnchantmentLevel);
 
-					for (Enchantment e : ForgeRegistries.ENCHANTMENTS.getValues()) {
-						boolean isBlacklisted = false;
-
-						if (stack.getItem().getRegistryName().toString().equalsIgnoreCase("minecraft:enchanted_book")) {
-							if (blacklistedEnchantments != null) {
-								for (String blacklisted : blacklistedEnchantments) {
-									if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
-										isBlacklisted = true;
-									}
-								}
-							}
-							if (!isBlacklisted) {
-								availableRandomEnchantments.add(e);
-							}
-						} else if (e.canApplyAtEnchantingTable(enchantedStack)) {
-							// Shameless copy/paste - promise you won't tell anyone!
-							if (blacklistedEnchantments != null) {
-								for (String blacklisted : blacklistedEnchantments) {
-									if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
-										isBlacklisted = true;
-									}
-								}
-							}
-							if (!isBlacklisted) {
-								availableRandomEnchantments.add(e);
-							}
-						}
-					}
-
-					if (availableRandomEnchantments.size() > 0) {
-						addEnchantmentMyWay(enchantedStack,
-								availableRandomEnchantments
-										.get(TradeUtil.random.nextInt(availableRandomEnchantments.size())),
-								enchantments[i].enchantmentLevel, enchantments[i].maxEnchantmentLevel);
-					}
 				} else if (enchantments[i].enchantmentKey.contains("#")) {
 					String[] enchantmentChoices = enchantments[i].enchantmentKey.split("#");
 
@@ -436,7 +403,6 @@ public class MyTradeItem {
 	}
 
 	private ItemStack addEnchantmentMyWay(ItemStack stack, Enchantment enchantment, int level, int maxLevel) {
-
 		int chosenLevel = level;
 
 		if (level < 0) {
@@ -445,9 +411,88 @@ public class MyTradeItem {
 
 		if (stack.getItem() == Items.ENCHANTED_BOOK) {
 			EnchantedBookItem.addEnchantment(stack, new EnchantmentData(enchantment, chosenLevel));
+
 		} else {
 			stack.enchant(enchantment, chosenLevel);
 		}
 		return stack;
+	}
+
+	private Enchantment generateTrueRandomEnchantment(ItemStack stack) {
+		ArrayList<Enchantment> availableRandomEnchantments = new ArrayList<Enchantment>();
+
+		for (Enchantment e : ForgeRegistries.ENCHANTMENTS.getValues()) {
+			boolean isBlacklisted = false;
+
+			if (stack.getItem().getRegistryName().toString().equalsIgnoreCase("minecraft:enchanted_book")) {
+				if (blacklistedEnchantments != null) {
+					for (String blacklisted : blacklistedEnchantments) {
+						if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
+							isBlacklisted = true;
+						}
+					}
+				}
+				if (!isBlacklisted) {
+					availableRandomEnchantments.add(e);
+				}
+			} else if (e.canApplyAtEnchantingTable(stack)) {
+				// Shameless copy/paste - promise you won't tell anyone!
+				if (blacklistedEnchantments != null) {
+					for (String blacklisted : blacklistedEnchantments) {
+						if (e.getRegistryName().toString().equalsIgnoreCase(blacklisted)) {
+							isBlacklisted = true;
+						}
+					}
+				}
+				if (!isBlacklisted) {
+					availableRandomEnchantments.add(e);
+				}
+			}
+		}
+
+		if (availableRandomEnchantments.size() > 0) {
+			Enchantment selectedRandomEnchantment = availableRandomEnchantments
+					.get(TradeUtil.random.nextInt(availableRandomEnchantments.size()));
+
+			boolean isUnique = false;
+			int attemptNumber = 0;
+
+			while (!isUnique) {
+				ListNBT appliedEnchantments = stack.getEnchantmentTags();
+
+				if (stack.getItem() == Items.ENCHANTED_BOOK) {
+					appliedEnchantments = EnchantedBookItem.getEnchantments(stack);
+				}
+
+				boolean foundConflict = false;
+				for (int j = 0; j < appliedEnchantments.size(); j++) {
+					CompoundNBT entry = appliedEnchantments.getCompound(j);
+
+					if (selectedRandomEnchantment.getRegistryName().toString()
+							.equalsIgnoreCase(entry.getString("id"))) {
+						foundConflict = true;
+						selectedRandomEnchantment = availableRandomEnchantments
+								.get(TradeUtil.random.nextInt(availableRandomEnchantments.size()));
+					}
+				}
+
+				if (!foundConflict) {
+					isUnique = true;
+				} else {
+					attemptNumber++;
+				}
+
+				// Forces this loop to stop after 3 attempts, just in case...
+				if (attemptNumber >= 3) {
+					LogManager.getLogger(BaseClass.MODID).log(Level.WARN,
+							"Failed to find a unique enchantment after 3 attempts, stopping to conserve system resources.");
+					isUnique = true;
+				}
+			}
+
+			return selectedRandomEnchantment;
+		}
+
+		return null;
 	}
 }
